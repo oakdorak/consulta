@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oscar Robledo — Psicólogo online | Monterrey</title>
+<meta name="description" content="Psicoterapia Gestalt en línea para adultos, adolescentes y niños. Sesiones por videollamada de 50 minutos. Primera llamada de 15 minutos sin costo. Psicólogo titulado, cédula 13791687.">
+<meta name="theme-color" content="#231f24">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Oscar Robledo — Psicólogo online">
+<meta property="og:description" content="Psicoterapia Gestalt en línea. Adultos, adolescentes y niños. Monterrey y todo México.">
+<meta property="og:locale" content="es_MX">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23896ab0'/><circle cx='16' cy='16' r='7' fill='none' stroke='%23f7f3e8' stroke-width='2'/></svg>">
+<style>
+:root{
+  --ink:#231f24;
+  --ink-soft:#554f49;
+  --paper:#f7f3e8;
+  --paper-warm:#e9e4d6;
+  --line:#d8d0bc;
+  --accent:#896ab0;
+  --accent-deep:#52406a;
+  --sand:#9b8e6c;
+  --sage:#a8b28a;
+  --white:#fff;
+  --radius:14px;
+  --max:1080px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  font-size:17px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{line-height:1.22;margin:0 0 .5em;letter-spacing:-.015em;font-weight:600}
+h1{font-size:clamp(2rem,5.2vw,3.1rem)}
+h2{font-size:clamp(1.45rem,3vw,2rem)}
+h3{font-size:1.1rem}
+p{margin:0 0 1em}
+a{color:var(--accent-deep)}
+a:focus-visible,button:focus-visible,summary:focus-visible{
+  outline:3px solid var(--ink);outline-offset:3px;border-radius:4px
+}
+.contact a:focus-visible,.contact button:focus-visible,.contact .btn:focus-visible,
+footer a:focus-visible,.sticky-cta .btn:focus-visible{
+  outline-color:#e3e0a4
+}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+.eyebrow{
+  font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:600;color:var(--accent-deep);margin-bottom:.9em
+}
+.muted{color:var(--ink-soft)}
+.small{font-size:.88rem}
+
+/* header */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(247,243,232,.92);
+  backdrop-filter:saturate(140%) blur(10px);
+  border-bottom:1px solid var(--line)
+}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0}
+.brand{
+  font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-weight:600;font-size:1rem;letter-spacing:.01em;text-decoration:none;color:var(--ink)
+}
+.brand span{display:block;font-size:.7rem;font-weight:500;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink-soft);margin-top:1px}
+
+/* buttons */
+.btn{
+  display:inline-block;text-decoration:none;text-align:center;
+  font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:.94rem;font-weight:600;letter-spacing:.01em;
+  padding:13px 24px;border-radius:999px;border:1.5px solid transparent;
+  transition:transform .15s ease,background .15s ease,color .15s ease,border-color .15s ease
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--ink);color:var(--white)}
+.btn-primary:hover{background:var(--ink-soft)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent-deep)}
+.btn-sm{padding:10px 18px;font-size:.87rem}
+
+/* hero */
+.hero{padding:clamp(48px,8vw,92px) 0 clamp(40px,6vw,68px)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,5vw,68px);align-items:center}
+.hero h1{margin-bottom:.35em}
+.lede{font-size:clamp(1.05rem,2vw,1.22rem);color:var(--ink-soft);max-width:34em}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:1.9em}
+.cred{
+  margin-top:2.2em;padding-top:1.4em;border-top:1px solid var(--line);
+  font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:.83rem;color:var(--ink-soft);letter-spacing:.02em
+}
+.portrait{
+  aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;
+  background:#e9e4d6;border:1px solid var(--line)
+}
+.portrait img{
+  width:100%;height:100%;object-fit:cover;object-position:50% 26%;display:block
+}
+
+/* sections */
+section{padding:clamp(44px,7vw,78px) 0;border-top:1px solid var(--line)}
+.section-head{max-width:44rem;margin-bottom:clamp(28px,4vw,46px)}
+.section-head p{margin-bottom:0;color:var(--ink-soft)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:26px;counter-reset:s}
+.step{counter-increment:s;position:relative;padding-top:38px}
+.step::before{
+  content:counter(s);
+  position:absolute;top:0;left:0;
+  font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:.78rem;font-weight:700;color:var(--accent-deep);
+  width:26px;height:26px;border:1.5px solid var(--accent-deep);border-radius:50%;
+  display:flex;align-items:center;justify-content:center
+}
+.step h3{margin-bottom:.35em}
+.step p{margin:0;color:var(--ink-soft);font-size:.96rem}
+
+/* pricing */
+.prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.price{
+  background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px 22px;display:flex;flex-direction:column
+}
+.price.feature{border-color:var(--accent);box-shadow:0 1px 0 var(--accent) inset}
+.price .tag{
+  font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  color:var(--accent-deep);margin-bottom:.5em
+}
+.price h3{margin-bottom:.2em}
+.price .amount{
+  font-size:1.65rem;font-weight:600;letter-spacing:-.02em;margin:.15em 0 .1em;
+  font-variant-numeric:tabular-nums
+}
+.price .unit{
+  font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:.78rem;color:var(--ink-soft);margin-bottom:1em
+}
+.price p{font-size:.92rem;color:var(--ink-soft);margin:0}
+.price-note{
+  margin-top:26px;padding:18px 20px;background:var(--paper-warm);
+  border-radius:var(--radius);font-size:.92rem;color:var(--ink-soft)
+}
+.price-note p:last-child{margin-bottom:0}
+
+/* for whom */
+.audience{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.card{
+  background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px
+}
+.card h3{margin-bottom:.4em}
+.card p{font-size:.94rem;color:var(--ink-soft);margin-bottom:0}
+.card ul{margin:.6em 0 0;padding-left:1.15em;font-size:.94rem;color:var(--ink-soft)}
+.card li{margin-bottom:.3em}
+
+/* about */
+.about{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(26px,5vw,60px);align-items:start}
+.about p{color:var(--ink-soft)}
+.creds{list-style:none;margin:1.4em 0 0;padding:0;font-size:.94rem}
+.creds li{
+  padding:11px 0;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap
+}
+.creds li:last-child{border-bottom:0}
+.creds .k{
+  font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-deep);
+  font-weight:600;padding-top:2px
+}
+.creds .v{flex:1;min-width:180px;text-align:right;color:var(--ink)}
+
+/* faq */
+details{
+  background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+  padding:0;margin-bottom:10px;overflow:hidden
+}
+details[open]{border-color:#c4b79a}
+summary{
+  cursor:pointer;padding:18px 22px;font-weight:600;list-style:none;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:18px;
+  font-size:1rem
+}
+summary::-webkit-details-marker{display:none}
+summary::after{
+  content:"+";flex:0 0 auto;font-family:ui-sans-serif,system-ui,sans-serif;
+  font-weight:400;font-size:1.25rem;line-height:1;color:var(--accent-deep);
+  transition:transform .18s ease
+}
+details[open] summary::after{transform:rotate(45deg)}
+details .body{padding:0 22px 20px;color:var(--ink-soft);font-size:.96rem}
+details .body p:last-child{margin-bottom:0}
+
+/* notice */
+.notice{
+  background:var(--white);border:1px solid var(--line);
+  border-left:4px solid var(--sand);border-radius:8px;
+  padding:20px 22px;font-size:.94rem;color:var(--ink-soft)
+}
+.notice strong{color:var(--ink)}
+.notice p:last-child{margin-bottom:0}
+
+/* contact */
+.contact{background:var(--ink);color:#f7f3e8;border-top:0}
+.contact h2{color:#fff}
+.contact p{color:#cfc8b8}
+.contact .eyebrow{color:#e3e0a4}
+.contact-grid{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}
+.contact .btn-primary{background:#e3e0a4;color:var(--ink)}
+.contact .btn-primary:hover{background:#f7f3e8}
+.contact .btn-ghost{border-color:#5a5158;color:#f7f3e8}
+.contact .btn-ghost:hover{border-color:#e3e0a4;color:#fff}
+.contact-lines{
+  margin-top:2em;font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:.86rem;color:#a89f92;line-height:1.9
+}
+.contact-lines a{color:#f7f3e8}
+.contact-lines a:hover{color:#fff}
+
+/* footer */
+footer{background:var(--ink);color:#958d7f;padding:0 0 46px}
+.foot-grid{
+  border-top:1px solid #3a3439;padding-top:26px;
+  display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:.78rem
+}
+footer a{color:#a89f92;text-decoration:none}
+footer a:hover{color:#e3e0a4;text-decoration:underline}
+.legal-links{display:flex;gap:18px;flex-wrap:wrap}
+
+/* sticky mobile cta */
+.sticky-cta{display:none}
+
+@media (max-width:820px){
+  .hero-grid,.about,.contact-grid{grid-template-columns:1fr}
+  .portrait{aspect-ratio:1/1;order:-1}
+  .creds .v{text-align:left}
+  .contact-grid{gap:26px}
+  .sticky-cta{
+    display:block;position:fixed;left:0;right:0;bottom:0;z-index:60;
+    padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+    background:rgba(35,31,36,.96);backdrop-filter:blur(8px);
+    border-top:1px solid #3a3439
+  }
+  .sticky-cta .btn{width:100%}
+  footer{padding-bottom:88px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#top">Oscar Robledo<span>Psicólogo · Céd. 13791687</span></a>
+    <a class="btn btn-primary btn-sm" href="#contacto">Agendar llamada</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="hero wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Psicoterapia Gestalt · En línea</p>
+        <h1>Un espacio para entender lo que se repite.</h1>
+        <p class="lede">
+          Atiendo a adultos, adolescentes y niños por videollamada. Trabajo desde lo que
+          está pasando ahora — la emoción, el cuerpo, la forma en que te relacionas — no
+          desde consejos ni desde tareas.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://wa.me/528119243005?text=Hola%2C%20quisiera%20agendar%20la%20llamada%20de%2015%20minutos.">Llamada de 15 min sin costo</a>
+          <a class="btn btn-ghost" href="#servicios">Ver servicios y precios</a>
+        </div>
+        <p class="cred">
+          Psicólogo titulado · Cédula profesional 13791687 · Formación en psicoterapia Gestalt,
+          Centro Fritz Perls · Monterrey, N.L.
+        </p>
+      </div>
+      <div class="portrait">
+        <img src="assets/retrato.jpg" alt="Oscar Robledo, psicólogo clínico" width="800" height="1000" decoding="async">
+      </div>
+    </div>
+  </div>
+
+  <section id="como">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Cómo es</p>
+        <h2>Nadie te dice qué pasa en la primera sesión. Te lo digo.</h2>
+        <p>Cuatro pasos, sin sorpresas. Si en cualquier punto decides no continuar, no hay penalización.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <h3>Llamada de 15 minutos</h3>
+          <p>Sin costo. Me cuentas qué te trae y te digo con claridad si lo que ofrezco es lo que necesitas. Si no lo es, te oriento hacia dónde buscar.</p>
+        </div>
+        <div class="step">
+          <h3>Primera sesión</h3>
+          <p>50 minutos por videollamada. Es una valoración: qué está pasando, desde cuándo, qué has intentado. Al final acordamos si seguimos y con qué frecuencia.</p>
+        </div>
+        <div class="step">
+          <h3>Encuadre por escrito</h3>
+          <p>Antes de la segunda sesión recibes el consentimiento informado y el contrato de servicios: confidencialidad, horarios, forma de pago y cómo terminar el proceso.</p>
+        </div>
+        <div class="step">
+          <h3>Sesiones regulares</h3>
+          <p>Normalmente una vez por semana, en día y hora fijos. Revisamos avances cada cuatro sesiones para decidir si el proceso sigue, cambia de ritmo o termina.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicios">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Servicios y precios</p>
+        <h2>Precios claros, sin paquetes ni letras chiquitas.</h2>
+        <p>Cada sesión se paga por separado. Puedo emitir factura si la necesitas.</p>
+      </div>
+      <div class="prices">
+
+        <div class="price feature">
+          <p class="tag">Adultos</p>
+          <h3>Terapia individual</h3>
+          <p class="amount">$650</p>
+          <p class="unit">50 minutos</p>
+          <p>Ansiedad, estados de ánimo, duelos, vínculos, límites y momentos de transición.</p>
+        </div>
+
+        <div class="price">
+          <p class="tag">13 a 17 años</p>
+          <h3>Terapia adolescente</h3>
+          <p class="amount">$700</p>
+          <p class="unit">50 minutos</p>
+          <p>Con encuadre de confidencialidad reforzada y devolución a los padres cada cuatro sesiones.</p>
+        </div>
+
+        <div class="price">
+          <p class="tag">8 a 12 años</p>
+          <h3>Terapia infantil</h3>
+          <p class="amount">$750</p>
+          <p class="unit">45 min + 15 min con padres</p>
+          <p>La sesión cierra con una devolución a los padres: qué se trabajó y qué observar en casa.</p>
+        </div>
+
+        <div class="price">
+          <p class="tag">Menores de 8 años</p>
+          <h3>Asesoría a padres</h3>
+          <p class="amount">$700</p>
+          <p class="unit">60 minutos · solo con los adultos</p>
+          <p>A esta edad la intervención eficaz es con los adultos que están con el niño todos los días.</p>
+        </div>
+
+      </div>
+
+      <div class="prices" style="margin-top:18px">
+        <div class="price">
+          <p class="tag">Grupos</p>
+          <h3>Taller para padres</h3>
+          <p class="amount">$350</p>
+          <p class="unit">por persona · 90 minutos · 15 a 20 lugares</p>
+          <p>Temas como límites sin gritos, pantallas, berrinches y desregulación emocional.</p>
+        </div>
+        <div class="price">
+          <p class="tag">Instituciones</p>
+          <h3>Charla para escuelas y pediatras</h3>
+          <p class="amount">Desde $2,500</p>
+          <p class="unit">60 a 90 minutos</p>
+          <p>Contenido aplicable, con casos concretos y espacio para preguntas del grupo.</p>
+        </div>
+        <div class="price">
+          <p class="tag">Primer contacto</p>
+          <h3>Llamada de orientación</h3>
+          <p class="amount">Sin costo</p>
+          <p class="unit">15 minutos</p>
+          <p>Para que decidas con información. No es una sesión de terapia y no sustituye la valoración.</p>
+        </div>
+      </div>
+
+      <div class="price-note">
+        <p><strong>Forma de pago:</strong> transferencia antes del inicio de la sesión. Con factura disponible.</p>
+        <p><strong>Cancelaciones:</strong> con más de 24 horas de anticipación se reprograma sin costo. Con menos de 24 horas, la sesión se cobra. Una cancelación tardía por causa de fuerza mayor al año no se cobra.</p>
+        <p><strong>Frecuencia:</strong> una sesión por semana. No manejo paquetes prepagados ni descuentos por volumen.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="para-quien">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Para quién</p>
+        <h2>Con quién trabajo y con quién no.</h2>
+        <p>Decir que no a tiempo también es parte del trabajo.</p>
+      </div>
+      <div class="audience">
+        <div class="card">
+          <h3>Adultos</h3>
+          <p>Cuando algo se sostiene en el tiempo y ya lo intentaste de varias formas.</p>
+          <ul>
+            <li>Ansiedad y sensación de estar siempre en alerta</li>
+            <li>Estados de ánimo bajos y pérdida de interés</li>
+            <li>Duelos y separaciones</li>
+            <li>Dificultad para poner límites</li>
+            <li>Decisiones que se postergan</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Adolescentes</h3>
+          <p>Espacio propio, con reglas claras sobre qué se comparte con los padres y qué no.</p>
+          <ul>
+            <li>Irritabilidad y conflictos en casa</li>
+            <li>Ansiedad escolar y social</li>
+            <li>Autoestima y autoexigencia</li>
+            <li>Cambios de escuela o de ciudad</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Niños de 8 a 12 años</h3>
+          <p>Sesión de 45 minutos más devolución a los padres. El trabajo con la familia es parte del proceso.</p>
+          <ul>
+            <li>Berrinches que ya no ceden</li>
+            <li>Ansiedad de separación</li>
+            <li>Dificultades con la escuela y la frustración</li>
+            <li>Cambios en casa: mudanza, separación, llegada de un hermano</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Padres de niños menores de 8</h3>
+          <p>Asesoría sin el niño presente, porque a esa edad la intervención eficaz es con los adultos.</p>
+          <ul>
+            <li>Pautas de crianza y límites</li>
+            <li>Berrinches y rabietas intensas</li>
+            <li>Pantallas y rutinas</li>
+            <li>Acuerdos entre los dos padres</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notice" style="margin-top:28px">
+        <p><strong>Lo que no atiendo.</strong> No doy atención de urgencia ni tengo disponibilidad las 24 horas. No realizo valoración ni tratamiento psiquiátrico ni prescribo medicamentos. No emito dictámenes periciales. Si lo que necesitas requiere alguna de esas cosas, te lo digo en la primera llamada y te oriento hacia el profesional adecuado.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="sobre-mi">
+    <div class="wrap">
+      <div class="about">
+        <div>
+          <p class="eyebrow">Sobre mí</p>
+          <h2>Oscar Robledo</h2>
+          <p>
+            Soy psicólogo titulado, con formación en psicoterapia Gestalt por el Centro de
+            Investigación y Entrenamiento en Psicoterapia Gestalt Fritz Perls.
+          </p>
+          <p>
+            Trabajo desde el aquí y el ahora: lo que sientes en la sesión, lo que tu cuerpo
+            registra, la manera en que te acercas o te alejas de los demás. No creo en las
+            recetas ni en los consejos que se dan sin conocer a la persona.
+          </p>
+          <p>
+            Crecí alrededor de la medicina — mi padre es pediatra — y de ahí viene mi interés
+            por el trabajo con niños y por la conversación con los padres, que casi siempre
+            son quienes cargan con la duda de si lo que pasa es normal.
+          </p>
+        </div>
+        <div>
+          <ul class="creds">
+            <li><span class="k">Licenciatura</span><span class="v">Psicología · Universidad Regiomontana</span></li>
+            <li><span class="k">Cédula</span><span class="v">13791687</span></li>
+            <li><span class="k">Formación</span><span class="v">Psicoterapia Gestalt · Centro Fritz Perls</span></li>
+            <li><span class="k">Modalidad</span><span class="v">En línea · videollamada</span></li>
+            <li><span class="k">Idiomas</span><span class="v">Español · Inglés</span></li>
+            <li><span class="k">Ubicación</span><span class="v">Monterrey, N.L. · todo México</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="preguntas">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Preguntas frecuentes</p>
+        <h2>Las dudas que casi nadie pregunta en voz alta.</h2>
+      </div>
+
+      <details>
+        <summary>¿La terapia por videollamada funciona igual que en persona?</summary>
+        <div class="body">
+          <p>Para adultos y adolescentes, la evidencia es buena y en la práctica funciona bien: la sesión ocurre en un espacio donde la persona ya se siente segura, sin traslados. Para niños pequeños, en cambio, no es el mismo formato — por eso con menores de 8 años trabajo con los padres en lugar de con el niño en pantalla.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Cuánto dura un proceso terapéutico?</summary>
+        <div class="body">
+          <p>Depende de qué te trae y desde cuándo. No doy plazos porque no sería honesto: hay procesos que se resuelven en pocas semanas y otros que requieren meses. Lo que sí garantizo es que revisamos cada cuatro sesiones si seguimos, si cambiamos el ritmo o si terminamos.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Lo que digo en sesión es confidencial?</summary>
+        <div class="body">
+          <p>Sí, con límites claros y por escrito en el consentimiento informado. La confidencialidad se rompe únicamente en tres casos: riesgo grave e inminente para tu vida o la de otra persona, sospecha de maltrato a un menor o a una persona vulnerable —donde la ley obliga a avisar—, y cuando un juez lo ordena.</p>
+          <p>Con adolescentes, el encuadre es distinto y se explica a los padres desde la primera sesión: qué se comparte y qué no.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Qué pasa si necesito cancelar?</summary>
+        <div class="body">
+          <p>Con más de 24 horas de anticipación, se reprograma sin costo. Con menos de 24 horas, la sesión se cobra, porque ese espacio ya estaba reservado. Una cancelación tardía por causa de fuerza mayor al año no se cobra.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Puedo facturar?</summary>
+        <div class="body">
+          <p>Sí, emito factura. Muchos gastos médicos mayores reembolsan consultas de psicología, así que vale la pena preguntar en tu aseguradora antes de la primera sesión.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Atiendes urgencias?</summary>
+        <div class="body">
+          <p>No. No tengo disponibilidad las 24 horas ni doy atención de crisis inmediata. Si estás en peligro ahora mismo, llama al <strong>911</strong> o a la <strong>Línea de la Vida: 800 911 2000</strong> (gratuita, 24 horas).</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>¿Cómo se maneja el pago?</summary>
+        <div class="body">
+          <p>Por transferencia antes del inicio de la sesión. No manejo efectivo, ni paquetes prepagados, ni descuentos por volumen.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="contact" id="contacto">
+    <div class="wrap">
+      <div class="contact-grid">
+        <div>
+          <p class="eyebrow">Contacto</p>
+          <h2>Empieza con quince minutos.</h2>
+          <p>Sin costo y sin compromiso. Me cuentas qué te trae y te digo con claridad si puedo ayudarte o si lo tuyo necesita otro camino.</p>
+          <div class="contact-lines">
+            <a href="https://wa.me/528119243005">WhatsApp · +52 81 1924 3005</a><br>
+            <a href="mailto:oscarrobledo1793@gmail.com">oscarrobledo1793@gmail.com</a><br>
+            Monterrey, Nuevo León · Atención en todo México
+          </div>
+        </div>
+        <div>
+          <a class="btn btn-primary" href="https://wa.me/528119243005?text=Hola%2C%20quisiera%20agendar%20la%20llamada%20de%2015%20minutos.">Escribir por WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        Oscar Robledo · Psicólogo · Cédula 13791687<br>
+        Monterrey, Nuevo León, México · © 2026
+      </div>
+      <div class="legal-links">
+        <a href="legal/aviso-privacidad.html">Aviso de privacidad</a>
+        <a href="legal/consentimiento-informado.html">Consentimiento informado</a>
+        <a href="#preguntas">Preguntas frecuentes</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="sticky-cta">
+  <a class="btn btn-primary" href="https://wa.me/528119243005?text=Hola%2C%20quisiera%20agendar%20la%20llamada%20de%2015%20minutos.">Llamada de 15 min sin costo</a>
+</div>
+
+</body>
+</html>
