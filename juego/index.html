@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Juego de islas — Oscar Robledo, Psicólogo</title>
+<meta name="description" content="Cazavínculos y archipiélago explorable: 57 islas de conocimiento neurodivergente conectadas. Juego gratuito para padres.">
+<meta name="theme-color" content="#231f24">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23896ab0'/><circle cx='16' cy='16' r='7' fill='none' stroke='%23f7f3e8' stroke-width='2'/></svg>">
+<style>
+:root{--ink:#231f24;--ink-soft:#554f49;--paper:#f7f3e8;--line:#d8d0bc;--accent:#896ab0;--accent-deep:#52406a;--white:#fff}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+.wrap{max-width:780px;margin:0 auto;padding:0 22px}
+header{border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0}
+.brand{font-family:ui-sans-serif,sans-serif;font-weight:600;font-size:1rem;text-decoration:none;color:var(--ink)}
+.brand span{display:block;font-size:.7rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft);margin-top:1px}
+main{padding:clamp(28px,6vw,48px) 0 60px}
+.eyebrow{font-family:ui-sans-serif,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-deep);margin:0 0 8px}
+h1{font-size:clamp(1.5rem,4vw,2rem);margin:0 0 .4em}
+.lede{color:var(--ink-soft);margin:0 0 22px}
+.modes{display:flex;gap:10px;margin-bottom:22px}
+.mode{font-family:ui-sans-serif,sans-serif;font-weight:700;font-size:.9rem;border:1px solid var(--accent);background:transparent;color:var(--accent-deep);border-radius:999px;padding:10px 20px;cursor:pointer}
+.mode.on{background:var(--accent);color:var(--white)}
+.q{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:16px}
+.q p{font-weight:700;margin:0 0 10px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;font-family:ui-sans-serif,sans-serif;font-size:.92rem;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:10px 14px;cursor:pointer;color:var(--ink)}
+.opt.ok{background:#dfe8d2;border-color:#3f5a2a}
+.opt.bad{background:#f0d4cd;border-color:#8c3b2e}
+.fb{font-size:.9rem;color:var(--ink-soft);margin-top:10px}
+.score{font-family:ui-sans-serif,sans-serif;font-weight:700;font-size:1.1rem;margin:18px 0}
+.btn{display:inline-block;font-family:ui-sans-serif,sans-serif;font-weight:600;font-size:.9rem;text-decoration:none;border-radius:999px;padding:11px 22px;border:1px solid var(--accent);cursor:pointer}
+.btn-primary{background:var(--accent);color:var(--white)}
+.btn-ghost{background:transparent;color:var(--accent-deep)}
+#map{width:100%;height:auto;display:block}
+.node{cursor:pointer}
+.node text{font-family:ui-sans-serif,sans-serif;font-size:9px;fill:var(--ink-soft)}
+.edge{stroke:var(--accent);stroke-width:1;opacity:.45}
+.detail{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:16px}
+.detail h2{margin:0 0 6px;font-size:1.1rem}
+.detail .refs{font-size:.85rem;color:var(--ink-soft)}
+footer{border-top:1px solid var(--line);padding:26px 0 46px;font-family:ui-sans-serif,sans-serif;font-size:.78rem;color:#958d7f}
+footer a{color:#584f56;text-decoration:none}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="../index.html">Oscar Robledo<span>Psicólogo · Céd. 13791687</span></a>
+    <a class="btn btn-ghost" href="../index.html#articulos">Volver a guías</a>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <p class="eyebrow">Para padres · Juego gratuito</p>
+    <h1>El archipiélago de las islas</h1>
+    <p class="lede">57 islas de conocimiento sobre neurodivergencia, conectadas por la memoria del viaje. Descubre los vínculos entre ellas.</p>
+    <div class="modes">
+      <button class="mode on" id="m-quiz">Cazavínculos</button>
+      <button class="mode" id="m-map">Explorar islas</button>
+    </div>
+
+    <section id="view-quiz">
+      <div id="quizbox"></div>
+    </section>
+
+    <section id="view-map" hidden>
+      <svg id="map" viewBox="0 0 720 520" role="img" aria-label="Mapa de islas"></svg>
+      <div class="detail" id="detail"><p class="refs">Toca una isla para ver su síntesis y sus vínculos.</p></div>
+    </section>
+
+    <div id="cta" hidden>
+      <p class="score" id="final"></p>
+      <div>
+        <a class="btn btn-primary" href="https://wa.me/528119243005?text=Hola%20Oscar%2C%20jugu%C3%A9%20al%20Cazav%C3%ADnculos%20del%20archipi%C3%A9lago%20y%20quiero%20mi%20gu%C3%ADa%20personalizada.">Quiero mi guía por WhatsApp</a>
+        <a class="btn btn-ghost" href="../index.html#articulos">Leer las guías</a>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="wrap">
+    Oscar Robledo · Psicólogo · Cédula profesional 13791687 ·
+    <a href="../index.html#contacto">Contacto</a>
+  </div>
+</footer>
+<script>
+const DATA = {"islands": [{"id": "1-1", "t": "ADHD attention deficit children intervention", "s": "Isla de conocimiento: ADHD attention deficit children intervention\n\nHallazgos:\n- PRISMA Statement for Reporting Systematic Reviews and Meta-Analyses of Studies That Evaluate Health Care Interventions (2009, 27869 citas)\n"}, {"id": "1-2", "t": "autism spectrum disorder ASD social skills", "s": "Síntesis Operativa:\n\n1. **Intervención Temprana:** Implementar programas de estimulación intensiva antes de la finalización del período crítico de vulnerabilidad para aumentar la neuroplasticidad y facilitar la adquisici"}, {"id": "1-3", "t": "neurodiversity learning disabilities cognitive", "s": "### Reducción del \"AI Slop\"\n\nBasado en la literatura científica, aquí tienes una síntesis operativa con 3 puntos clave sobre el panorama actual de las neurodivergencias (espectro autista, TDAH, dislexia):\n\n1. **Transició"}, {"id": "1-4", "t": "sleep regulation children circadian rhythm", "s": "### Síntesis Operativa: Regulación del Sueño en Niños desde la Perspectiva Clinica Integrada\n\n1. **La VFC como Biomarcador Precoz del Desajuste Circadiano en Pediatría**\n   - Implementar protocolos estandarizados para ev"}, {"id": "1-5", "t": "anxiety children cognitive behavioral therapy", "s": "### Síntesis Operativa\n\n#### Valida Estadística Rigurosa en Medio-Terreno\n\n1. **Asimptóticos y Remuestreo**: Utilizamos métodos asimptóticos y resampling para evaluar el efecto terapéutico de la TCC. Bootstrapping y prue"}, {"id": "1-6", "t": "dyslexia phonological awareness reading", "s": "### **Síntesis Operativa para Profesionales Clínicos e Investigadores**\n\n#### 1. Segmentación del Grano Psicolingüístico:\n- **Múltiples Variables:** Considerar tanto fonológicos como silábicos.\n- **Protocolos Personaliza"}, {"id": "1-7", "t": "executive function ADHD children training", "s": "### Síntesis Operativa Completa para Intervención Clínica Compleja\n\n#### 1. Integración Físico y Cognitiva\n\n- **Gasto Energético:** Aumentar gasto energético no solo mejora atención cerebral (TDAH) sino que actúa como co"}, {"id": "1-8", "t": "sensory processing disorder occupational therapy", "s": "### Síntesis Operativa: Trastornos del Procesamiento Sensorial (TPS) – Terapia Ocupacional Pediátrica\n\n1. **Intervención en fase Crítica:**\n    La terapia ocupacional enfocada debe comenzar inmediatamente después de la d"}, {"id": "1-9", "t": "emotional regulation neurodivergent children", "s": "**Síntesis Operativa de 3 Puntos Clave:**\n\n1. **Acceso a la Neuroplasticidad Individualizada:** Diseñar entornos que se adapten a las necesidades neurocognitivas específicas del niño (ej. uso de IA para personalizar carg"}, {"id": "1-10", "t": "digital therapeutics pediatric mental health", "s": "**Sintesis reducida:**\n\n1. **Optimización del Ratio Morbidity-Mortality vs. Neuroplasticity:** Al analizar la tensión entre las condiciones clínicas globales (morbidad y mortalidad) y la enfermedades de neuroplasticidad "}, {"id": "1-11", "t": "gamification learning disabilities education", "s": "**Síntesis Operativa Extendida:** Gamificación, Neurodivergencia y Terapias Digitales\n\n1. **De \"Corrección\" a \"Puesta en Escena\":**\n   Los modelos basados en Gamificación utilizan fortalezas específicas como hiperfocaliz"}, {"id": "1-12", "t": "biofeedback children anxiety heart rate", "s": "### Síntesis Operativa Extendida: Biomarcadores Fisiológicos en Terapías para Niños Ansiosos\n\n1. **El Tono Vagal como Indicador Cuantitativo de Seguridad Neurocognitiva**\n    Basándote en *Heart Rate Variability and Card"}, {"id": "1-13", "t": "speech language pathology autism AAC", "s": "### Síntesis Operativa Académica (Análisis Teórico)\n\n1. **Correlación entre el Tono Vagal y la Capacidad Comunicativa Emergente:**\n    El tono vagal es una métrica clave para evaluar la \"seguridad neurocognitiva\" en niño"}, {"id": "1-14", "t": "mindfulness children ADHD attention", "s": "### Intervención Clínica para Niños con TDAH, Mindfulness y Funciones Ejecutivas\n\n1. **Diferenciación Diagnóstica Con NIMH DISC-IV**\n   - Inicialmente aplicar el inventorio **NIMH DISC-IV** para clasificar los niños segú"}, {"id": "1-15", "t": "teletherapy pediatric remote intervention", "s": "**Análisis Operativo para Teleterapia Pediátrica Remota:**\n\nBasándome en la combinación entre tus \"islas\" previas, incluyendo el enfoque neuroplástico, las guías de actividad física y los factores facilitadores/barreras,"}, {"id": "1-16", "t": "parent training ADHD behavior management", "s": "**Título:** Manejo del TDAH con Entrenamiento Parental: La Estrategia Ideal para un Proceso Clínico Eficiente\n\n1. **Entrenamiento conductual familiar en el TDAH:** Implementar técnicas de entrenamiento parental específic"}, {"id": "1-17", "t": "social skills autism peer interaction", "s": "### Sintesis Operativa para aplicaciones tecnológicas\n\n1. **Implementación de IVR como Facilitador del Tono Vagal en Poblaciones Universitarias:**\n    Integrar IVR permite crear escenarios sociales controlados y predecib"}, {"id": "1-18", "t": "music therapy neurodevelopmental disorders", "s": "# Integración Neuro-Comportamental y Temprana en Desordenes del Desarrollo\n\n1. **Urgencia Crítica del Intervención Pre-Crítico:**\n   - El diagnóstico temprano de un trastorno sensorial, como el TPS o la dispraxia autista"}, {"id": "1-19", "t": "art therapy emotional regulation children", "s": "1. Materialización Somatica del Estado Afectivo: Utilizar materiales manipulables no verbales para externalizar patrones afectivos complejos.\n2. Co-regulación Mediante Feedback Sensomotor: Extensión del concepto de reduc"}, {"id": "1-20", "t": "exercise physical activity ADHD symptoms", "s": "**Síntesis Operativa**\n\n1. **Mindful Movement Supervisado:** Integra técnicas cognitivas con ejercicios físicos (yoga, caminatas) para mejorar ejecutivos y atención.\n2. **Correlación Neuroplasticidad/Diferenciación Diagn"}, {"id": "1-21", "t": "ADHD attention deficit children intervention", "s": "**Sintesis Reducida:**\n\nSe han solicitado referencias clínicas relacionadas con el trastorno por déficit de atención e hiperactividad (TDAH) en niños. La evaluación incluye dos puntos clave:\n\n1. **Relevancia:** Los infor"}, {"id": "1-22", "t": "autism spectrum disorder ASD social skills", "s": "### Rol: Gatekeeper / Consolidador de Conocimiento\n\nSíntesis Operativa Extensa:\n1. **Optimización de la Intervención Neuro-Comportamental Basada en Ventanas Críticas:**\n   - Utilizar IVR para activar sociales prefrontale"}, {"id": "1-23", "t": "neurodiversity learning disabilities cognitive", "s": "**Síntesis reducida:**\n\n- **Transición Paradigmática:** La literatura actual enfatiza el rol de la tecnología en la abordación de los problemas cognitivos de los individuos con neurodivergencias, mostrando que no se debe"}, {"id": "1-24", "t": "sleep regulation children circadian rhythm", "s": "### Síntesis Operativa Extendida e Integrada (Puntos Clave 3)\n\n1. **Inflamação Inversa en Art Therapy:**\n   Al materializar estados afectivos mediante texturas y formas en *Art Therapy*, el niño no solo reduce la carga c"}, {"id": "1-25", "t": "anxiety children cognitive behavioral therapy", "s": "### Síntesis Operativa: Integración Multimodal y Evidencia Global en Niños con Ansiedad\n\n1. **Validación Estadística Avanzada para Modelos de Mediatores Complejos**\n    Utilizamos métodos como bootstrapping/Monte Carlo p"}, {"id": "1-26", "t": "dyslexia phonological awareness reading", "s": "### Síntesis Operativa Clínica: Intervención Multimodal para la Ansiedad en el Aprendizaje Neurodivergente\n\n**1. Refinamiento del Intervención Fonológica bajo una Óptica Multigrano:**\n\n- Implementar estrategia de segment"}, {"id": "1-27", "t": "executive function ADHD children training", "s": "**Síntesis Operativa Corregida y Extendida**\n\n1. **Actividad Motora como Regulador Metabólico-Cerebral:** Los niños con TDAH no deben buscar maximizar el gasto energético mediante prácticas estáticas o meditativas. Deber"}, {"id": "1-28", "t": "sensory processing disorder occupational therapy", "s": "**Síntesis Operativa**\n\nLa gestión clínica del Proceso Sensorial (TPS) y su efecto directo en la carga global de enfermedades, específicamente en niños y jóvenes, es un tema de vital importancia. La intervención neuroplá"}, {"id": "1-29", "t": "emotional regulation neurodivergent children", "s": "### Análisis Crítico del Contexto Actual\n1. **Contradicción con el Estándar SOC8:** La aplicación estricta de \"estudios educativos estandarizados\" o incluso su mera simplificación mediante IA sin considerar la identidad "}, {"id": "1-30", "t": "digital therapeutics pediatric mental health", "s": "1. **Tecnologías para Potenciar Neurocognitiva**: Implementar aplicaciones digitales que activan vías neurofisiológicas específicas para mejorar potencial plástico cerebral, similar a los protocolos *Surviving Sepsis*. E"}, {"id": "1-31", "t": "gamification learning disabilities education", "s": "Síntesis Operativa Extendida:\n\n1. **Validación de los \"Momentos Justo\" mediante IA Generativa:** Las LLMs generan dinámica retroalimentación personalizada adaptativa, ajustando la dificultad según el ritmo específico del"}, {"id": "1-32", "t": "biofeedback children anxiety heart rate", "s": "### Síntesis Operativa: Biomarcadores Fisiológicos y Cognitivos en Terapia para Niños Ansiosos\n\nA continuación, se presentan 3 puntos clave derivados de la integración estricta del conocimiento previo bajo el contexto de"}, {"id": "1-33", "t": "speech language pathology autism AAC", "s": "### 1. Intervención Vagal para Promover Transferencia Neural\n\n**Conexión:**\nUtilizar biofeedback vagal para alcanzar estado de \"disminución del ruido fisiológico\" previo a introducir dispositivo AAC digital complejo. Est"}, {"id": "1-34", "t": "mindfulness children ADHD attention", "s": "### Síntesis Operativa\n\n1. **Exclusion Diferencial:** El diagnóstico inicial debe prioritizar el perfil neuropsicológico mediante herramientas validadas antes de determinar si una actividad física es un modulador o un di"}, {"id": "1-35", "t": "teletherapy pediatric remote intervention", "s": "### Confirmación / Contraste / Extensión\n\n**Confirma:**\n*   La necesidad urgente de integrar **vías neurofisiológicas específicas** en la teleterapia pediátrica, alineándose con protocolos rigurosos como *Surviving Sepsi"}, {"id": "1-36", "t": "parent training ADHD behavior management", "s": "1. **Dinamización de la Regulación Neurometabólica**: Actividad física dinámica, como los gimnasios y el patrullaje de perros.\n2. **Sincronización Círcadiano**: Rutinas familiares que alinear con las horas naturales de a"}, {"id": "1-37", "t": "social skills autism peer interaction", "s": "**3. Personalización del Entorno Inmersivo según Variaciones Clínicas (AQ vs. TEA-202):**\n- El perfil educativo individualizado puede variar significativamente, pero generalmente se centra en cuál es la capacidad cogniti"}, {"id": "1-38", "t": "music therapy neurodevelopmental disorders", "s": "### Síntesis Operativa\n\n1. **Intervención Preemptiva:**\n   - Diagnóstico temprano, mediante la utilización de métodos predactivos basados en el comportamiento.\n   - Terapia Musical Neuro-Comportamental para los casos \"ne"}, {"id": "1-39", "t": "art therapy emotional regulation children", "s": "### 1. Traducción Neurosensible mediante Materialidad Sónica y Táctil\n\nLas herramientas somáticas del arte permiten a niños neurodivergentes \"programar\" su propio estado afectivo antes de verbalizarlo. Esto crea un espac"}, {"id": "1-40", "t": "exercise physical activity ADHD symptoms", "s": "**Síntesis Operativa:**\n\n1. **Intervención Energetica vs. Optimización Neurometabolica:** La actividad física se asocia a un aumento en el metabolismo, pero la optimización selectiva de los neurotransmisores dopaminérgic"}, {"id": "1-41", "t": "ADHD attention deficit children intervention", "s": "**Síntesis Operativa:**\n\n1. **Integración Metodológica Rigurosa con PRISMA:** Evalúa estudios sobre el TDAH utilizando pruebas rigurosas como PRISMA Statement, garantizando un análisis objetivo y transparente.\n\n2. **Inte"}, {"id": "1-42", "t": "autism spectrum disorder ASD social skills", "s": "### Síntesis Operativa\n\n1. **Ajuste Personalizado a Ventanas Críticas:**\n   El índice AQ no debe limitarse a la estratificación poblacional inicial. Se establece un umbral específico para definir ventanas críticas person"}, {"id": "1-43", "t": "neurodiversity learning disabilities cognitive", "s": "**Pilares Críticos para entender este Cambio Epistemológico:**\n\n1. **De la \"Patología\" al \"Ecosistema Cognitivo\":** Los estudios recientes han superado el modelo médico tradicional que veía las condiciones como patología"}, {"id": "1-44", "t": "sleep regulation children circadian rhythm", "s": "**Síntesis Operativa Extendida e Integrada sobre Regulación del Sueño en la Niñez: VFC, Inflammaging y Eje Microbiota-Intestino-Cerebro**\n\n1. **Bajo VFC**: El estudio confirma que bajo un paradigma clínico integrado, la "}, {"id": "1-45", "t": "anxiety children cognitive behavioral therapy", "s": "Síntesis:\n\n- **Validación Indirecta**: Usa estrategias avanzadas para medir efectos indirectos (reestructuración cognitiva) en modelos complejos.\n- **Dinámico de Intervención**: Ajusta intervención funcionalmente según c"}, {"id": "1-46", "t": "dyslexia phonological awareness reading", "s": "**Síntesis Operativa de Validación de Protocolo:**\n\n1. **Priorización Cognitiva por Granulometría Dinámica:**\n    El análisis sugiere que los síntomas del Doble Déficit (deficits en conciencia fonológica y automatismo de"}, {"id": "1-47", "t": "executive function ADHD children training", "s": "**Puntos Clave para Operativa del Gatekeeper/Consolidador de Conocimiento:**\n\n1. **Actividad Física Dinámica y Alta Demanda Metabólica:** Los niños con TDAH requieren un programa de actividad física dinámica y de alta de"}, {"id": "1-48", "t": "sensory processing disorder occupational therapy", "s": "### Síntesis Operativa Extendida (Reformulada)\n\n**1. **Impacto Global de la Intervención Neuroplástica:**\nEl *Global Burden of Disease* 2019 y GBD 2016 indican que el TPS es una carga global de 369 enfermedades e lesione"}, {"id": "1-49", "t": "emotional regulation neurodivergent children", "s": "### Análisis Crítico de Hallazgos\n\nLa referida a la **Versión 2022 del *Standards of Care* (SOC)** es el punto fundamental que corrige una posible interpretación errónea en los datos previos: no se trata simplemente de \""}, {"id": "1-50", "t": "digital therapeutics pediatric mental health", "s": "### Síntesis Operativa Clave\n\n**1. Repositionamiento de los \"Enfermedades Neuropsiquiátricas\" desde el Marco GBD al Paradigma de Neuroplasticidad Terapéutica**\nLos datos del *Global Burden of Disease* (2017, 2021) demues"}, {"id": "2-1", "t": "gamification learning disabilities education", "s": "**Gamificación Clínica para Neurodivergencia**\n\n1. **Autodeterminación vs. Hiperestimulación Sensorial:**\n   - En entornos digitales, el juego se adapta a los patrones del individuo, proporcionando desafíos cognitivos qu"}, {"id": "2-2", "t": "biofeedback children anxiety heart rate", "s": "### 1. Validación Cuantitativa del Tono Vagal como Marcador Primario de Seguridad Neurocognitiva\n\n- **Tono Vagal**: Medir la variabilidad de frecuencia cardíaca en estado de reposo es crucial para validar si el biofeedba"}, {"id": "2-3", "t": "speech language pathology autism AAC", "s": "### Rol: Gatekeeper / Consolidador de Conocimiento\n\nSíntesis Operativa Académica Extendida\n\n**1. El Tono Vagal como Gateway de Plasticidad para Tecnología Avanzada:**\n\nEl \"estado de calma\" logrado mediante biofeedback va"}, {"id": "2-4", "t": "mindfulness children ADHD attention", "s": "### Síntesis Operativa Reducida\n\n1. **Intervención Moduladora de la Atención:**\n   La práctica de atención plena como modulador sinérgico para niños con TDAH mejora la eficiencia energética en tareas complejas, reduciend"}, {"id": "2-5", "t": "teletherapy pediatric remote intervention", "s": "### 1. Diseño de Protocoles Ágiles para Contextos Heterogéneos (Supervisión Remota vs. Realidad Disparada)\n\n- **Adaptación Basada en Entorno**: Implementar una plataforma para supervisión remota que permita ajustes dinám"}, {"id": "2-6", "t": "parent training ADHD behavior management", "s": "### 1. Optimización Neurofisiológica: De la Actividad Metabólica al Ritmo Sueño-Despertar\n\n**Operación Clínica:** El entrenamiento parental debe trascender la mera prescripción de ejercicio. Se requiere una intervención "}, {"id": "2-7", "t": "social skills autism peer interaction", "s": "### Síntesis Operativa de 3 Puntos Clave\n\n1. **Modulación del \"Sandbox\" sobre la Neuroplasticidad Social:**\n   Experiencias en simulaciones inmersivas permiten procesamiento emocional más profundo que interfaces tradicio"}], "edges": [["1-7", "2-1"], ["1-7", "2-1"], ["1-7", "2-5"], ["1-8", "2-5"], ["1-8", "2-2"], ["1-9", "2-4"], ["1-9", "2-7"], ["1-10", "1-9"], ["1-10", "1-8"], ["1-11", "2-3"], ["1-11", "1-10"], ["1-12", "2-5"], ["1-12", "1-9"], ["1-13", "2-2"], ["1-13", "1-12"], ["1-14", "2-1"], ["1-14", "2-1"], ["1-14", "2-7"], ["1-15", "1-10"], ["1-15", "2-1"], ["1-15", "2-1"], ["1-16", "2-7"], ["1-16", "1-14"], ["1-16", "2-1"], ["1-17", "2-2"], ["1-17", "1-13"], ["1-18", "1-8"], ["1-18", "2-5"], ["1-19", "1-9"], ["1-19", "2-5"], ["1-20", "1-16"], ["1-20", "1-14"], ["1-21", "2-1"], ["1-21", "2-1"], ["1-21", "1-14"], ["1-22", "2-2"], ["1-22", "1-17"], ["1-23", "2-3"], ["1-23", "1-11"], ["1-24", "2-4"], ["1-24", "1-19"], ["1-25", "2-5"], ["1-25", "1-19"], ["1-26", "2-6"], ["1-26", "1-25"], ["1-27", "2-7"], ["1-27", "1-21"], ["1-28", "1-8"], ["1-28", "1-25"], ["1-29", "1-9"], ["1-29", "1-19"], ["1-30", "1-10"], ["1-30", "1-15"], ["1-31", "1-11"], ["1-31", "1-23"], ["1-32", "1-12"], ["1-32", "1-25"], ["1-33", "1-13"], ["1-33", "1-22"], ["1-34", "1-14"], ["1-34", "1-21"], ["1-34", "2-1"], ["1-35", "1-15"], ["1-35", "1-30"], ["1-36", "1-16"], ["1-36", "1-27"], ["1-37", "1-17"], ["1-37", "1-22"], ["1-38", "1-18"], ["1-38", "1-28"], ["1-39", "1-19"], ["1-39", "1-29"], ["1-40", "1-20"], ["1-40", "1-36"], ["1-40", "1-34"], ["1-41", "1-21"], ["1-41", "2-1"], ["1-41", "2-1"], ["1-42", "1-22"], ["1-42", "2-2"], ["1-43", "1-23"], ["1-43", "2-3"], ["1-44", "1-24"], ["1-44", "2-4"], ["1-45", "1-25"], ["1-45", "2-5"], ["1-46", "1-26"], ["1-46", "2-6"], ["1-47", "1-27"], ["1-47", "2-7"], ["1-48", "1-28"], ["1-48", "1-8"], ["1-49", "1-29"], ["1-49", "1-9"], ["1-50", "1-30"], ["1-50", "1-10"], ["2-1", "1-31"], ["2-1", "1-11"], ["2-2", "1-32"], ["2-2", "1-12"], ["2-3", "1-33"], ["2-3", "1-13"], ["2-4", "1-34"], ["2-4", "1-14"], ["2-5", "1-35"], ["2-5", "1-15"], ["2-6", "1-36"], ["2-6", "1-16"], ["2-6", "1-47"], ["2-7", "1-37"], ["2-7", "1-17"]]};
+const QUIZ = {
+ "quiz": [
+  {
+   "q": "La isla «executive function ADHD children training» se conecta directamente con:",
+   "opts": [
+    "sensory processing disorder occupational therapy",
+    "gamification learning disabilities education",
+    "autism spectrum disorder ASD social skills",
+    "ADHD attention deficit children intervention"
+   ],
+   "ans": "gamification learning disabilities education",
+   "fb": "Es la isla 2-1 (gamification learning disabilities education), enlazada por la memoria del viaje entre ambas síntesis."
+  },
+  {
+   "q": "La isla «sensory processing disorder occupational therapy» se conecta directamente con:",
+   "opts": [
+    "sensory processing disorder occupational therapy",
+    "teletherapy pediatric remote intervention",
+    "neurodiversity learning disabilities cognitive",
+    "music therapy neurodevelopmental disorders"
+   ],
+   "ans": "teletherapy pediatric remote intervention",
+   "fb": "Es la isla 2-5 (teletherapy pediatric remote intervention), enlazada por la memoria del viaje entre ambas síntesis."
+  },
+  {
+   "q": "La isla «emotional regulation neurodivergent children» se conecta directamente con:",
+   "opts": [
+    "autism spectrum disorder ASD social skills",
+    "mindfulness children ADHD attention",
+    "dyslexia phonological awareness reading",
+    "anxiety children cognitive behavioral therapy"
+   ],
+   "ans": "mindfulness children ADHD attention",
+   "fb": "Es la isla 2-4 (mindfulness children ADHD attention), enlazada por la memoria del viaje entre ambas síntesis."
+  },
+  {
+   "q": "La isla «digital therapeutics pediatric mental health» se conecta directamente con:",
+   "opts": [
+    "autism spectrum disorder ASD social skills",
+    "sensory processing disorder occupational therapy",
+    "emotional regulation neurodivergent children",
+    "anxiety children cognitive behavioral therapy"
+   ],
+   "ans": "emotional regulation neurodivergent children",
+   "fb": "Es la isla 1-9 (emotional regulation neurodivergent children), enlazada por la memoria del viaje entre ambas síntesis."
+  },
+  {
+   "q": "La isla «gamification learning disabilities education» se conecta directamente con:",
+   "opts": [
+    "neurodiversity learning disabilities cognitive",
+    "executive function ADHD children training",
+    "teletherapy pediatric remote intervention",
+    "speech language pathology autism AAC"
+   ],
+   "ans": "speech language pathology autism AAC",
+   "fb": "Es la isla 2-3 (speech language pathology autism AAC), enlazada por la memoria del viaje entre ambas síntesis."
+  },
+  {
+   "q": "La isla «biofeedback children anxiety heart rate» se conecta directamente con:",
+   "opts": [
+    "teletherapy pediatric remote intervention",
+    "anxiety children cognitive behavioral therapy",
+    "parent training ADHD behavior management",
+    "dyslexia phonological awareness reading"
+   ],
+   "ans": "teletherapy pediatric remote intervention",
+   "fb": "Es la isla 2-5 (teletherapy pediatric remote intervention), enlazada por la memoria del viaje entre ambas síntesis."
+  },
+  {
+   "q": "La isla «speech language pathology autism AAC» se conecta directamente con:",
+   "opts": [
+    "neurodiversity learning disabilities cognitive",
+    "digital therapeutics pediatric mental health",
+    "teletherapy pediatric remote intervention",
+    "biofeedback children anxiety heart rate"
+   ],
+   "ans": "biofeedback children anxiety heart rate",
+   "fb": "Es la isla 2-2 (biofeedback children anxiety heart rate), enlazada por la memoria del viaje entre ambas síntesis."
+  },
+  {
+   "q": "La isla «mindfulness children ADHD attention» se conecta directamente con:",
+   "opts": [
+    "mindfulness children ADHD attention",
+    "ADHD attention deficit children intervention",
+    "gamification learning disabilities education",
+    "sleep regulation children circadian rhythm"
+   ],
+   "ans": "gamification learning disabilities education",
+   "fb": "Es la isla 2-1 (gamification learning disabilities education), enlazada por la memoria del viaje entre ambas síntesis."
+  },
+  {
+   "q": "La isla «teletherapy pediatric remote intervention» se conecta directamente con:",
+   "opts": [
+    "gamification learning disabilities education",
+    "art therapy emotional regulation children",
+    "ADHD attention deficit children intervention",
+    "digital therapeutics pediatric mental health"
+   ],
+   "ans": "digital therapeutics pediatric mental health",
+   "fb": "Es la isla 1-10 (digital therapeutics pediatric mental health), enlazada por la memoria del viaje entre ambas síntesis."
+  },
+  {
+   "q": "La isla «parent training ADHD behavior management» se conecta directamente con:",
+   "opts": [
+    "sleep regulation children circadian rhythm",
+    "social skills autism peer interaction",
+    "ADHD attention deficit children intervention",
+    "mindfulness children ADHD attention"
+   ],
+   "ans": "social skills autism peer interaction",
+   "fb": "Es la isla 2-7 (social skills autism peer interaction), enlazada por la memoria del viaje entre ambas síntesis."
+  }
+ ]
+};
+const byId = {};
+DATA.islands.forEach(i => byId[i.id] = i);
+const links = {};
+DATA.edges.forEach(([a, b]) => {
+  (links[a] = links[a] || []).push(b);
+  (links[b] = links[b] || []).push(a);
+});
+const MQ = document.getElementById('m-quiz'), MM = document.getElementById('m-map');
+const VQ = document.getElementById('view-quiz'), VM = document.getElementById('view-map');
+MQ.onclick = () => { MQ.classList.add('on'); MM.classList.remove('on'); VQ.hidden = false; VM.hidden = true; };
+MM.onclick = () => { MM.classList.add('on'); MQ.classList.remove('on'); VQ.hidden = true; VM.hidden = false; };
+
+// ---- Quiz cazavínculos
+let qi = 0, score = 0;
+const qb = document.getElementById('quizbox');
+function showQ() {
+  if (qi >= QUIZ.quiz.length) {
+    qb.innerHTML = "";
+    document.getElementById('final').textContent = "Puntuación: " + score + "/" + QUIZ.quiz.length + " vínculos cazados.";
+    document.getElementById('cta').hidden = false;
+    return;
+  }
+  const q = QUIZ.quiz[qi];
+  qb.innerHTML = '<div class="q"><p>' + (qi + 1) + ". " + q.q + '</p><div class="opts">' +
+    q.opts.map(o => '<button class="opt">' + o + "</button>").join("") + '</div><div class="fb"></div></div>';
+  qb.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+    const ok = b.textContent === q.ans;
+    qb.querySelectorAll('.opt').forEach(x => x.disabled = true);
+    b.classList.add(ok ? 'ok' : 'bad');
+    if (ok) score++;
+    qb.querySelector('.fb').textContent = q.fb;
+    setTimeout(() => { qi++; showQ(); }, 1600);
+  });
+}
+showQ();
+
+// ---- Explorer
+const svg = document.getElementById('map');
+const NS = "http://www.w3.org/2000/svg";
+const cx = 360, cy = 260, R = 210;
+const pos = {};
+DATA.islands.forEach((isl, i) => {
+  const a = (i / DATA.islands.length) * Math.PI * 2 - Math.PI / 2;
+  pos[isl.id] = [cx + R * Math.cos(a), cy + R * Math.sin(a)];
+});
+DATA.edges.forEach(([a, b]) => {
+  if (!pos[a] || !pos[b]) return;
+  const l = document.createElementNS(NS, 'line');
+  l.setAttribute('x1', pos[a][0]); l.setAttribute('y1', pos[a][1]);
+  l.setAttribute('x2', pos[b][0]); l.setAttribute('y2', pos[b][1]);
+  l.setAttribute('class', 'edge');
+  svg.appendChild(l);
+});
+DATA.islands.forEach(isl => {
+  const g = document.createElementNS(NS, 'g');
+  g.setAttribute('class', 'node');
+  const c = document.createElementNS(NS, 'circle');
+  c.setAttribute('cx', pos[isl.id][0]); c.setAttribute('cy', pos[isl.id][1]);
+  c.setAttribute('r', 9); c.setAttribute('fill', '#896ab0');
+  const t = document.createElementNS(NS, 'text');
+  t.setAttribute('x', pos[isl.id][0] + 12); t.setAttribute('y', pos[isl.id][1] + 3);
+  t.textContent = isl.id;
+  g.appendChild(c); g.appendChild(t); svg.appendChild(g);
+  g.onclick = () => {
+    const ls = links[isl.id] || [];
+    document.getElementById('detail').innerHTML =
+      "<h2>Isla " + isl.id + ": " + isl.t + "</h2>" +
+      "<p>" + isl.s + "...</p>" +
+      '<p class="refs">Conectada con: ' + (ls.length ? ls.map(x => "V" + x.replace("-", "_")).join(", ") : "sin vínculos directos aún") + "</p>";
+  };
+});
+</script>
+</body>
+</html>
