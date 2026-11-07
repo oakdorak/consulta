@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Juego simbólico — Oscar Robledo, Psicólogo</title>
+<meta name="description" content="Escena de juego simbólico para niños: arrastra la casa, el árbol, el kit de doctor y a los monstruitos. Espacio para representar situaciones difíciles sin hablar directamente.">
+<meta name="theme-color" content="#231f24">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23896ab0'/><circle cx='16' cy='16' r='7' fill='none' stroke='%23f7f3e8' stroke-width='2'/></svg>">
+<style>
+:root{--ink:#231f24;--ink-soft:#554f49;--paper:#f7f3e8;--line:#d8d0bc;--accent:#896ab0;--accent-deep:#52406a;--sand:#9b8e6c;--white:#fff}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:0 22px}
+header{border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0}
+.brand{font-family:ui-sans-serif,sans-serif;font-weight:600;font-size:1rem;text-decoration:none;color:var(--ink)}
+.brand span{display:block;font-size:.7rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft);margin-top:1px}
+main{padding:clamp(28px,6vw,48px) 0 60px}
+.eyebrow{font-family:ui-sans-serif,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-deep);margin:0 0 8px}
+h1{font-size:clamp(1.5rem,4vw,2rem);margin:0 0 .4em}
+.lede{color:var(--ink-soft);margin:0 0 20px}
+#stage{position:relative;width:100%;aspect-ratio:16/9;background:linear-gradient(#e9e4d6 0 62%,#cbbf9e 62% 100%);border-radius:16px;border:1px solid var(--line);overflow:hidden;touch-action:none}
+#stage svg.bg{position:absolute;inset:0;width:100%;height:100%}
+.obj{position:absolute;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.obj:active{cursor:grabbing}
+.obj img{display:block;pointer-events:none}
+.obj svg{display:block;pointer-events:none}
+.actor{width:84px;height:84px}
+.actor .mouth{position:absolute;left:50%;top:62%;width:22px;height:6px;margin-left:-11px;background:#231f24;border-radius:4px;transform-origin:50% 50%}
+.actor.talking .mouth{animation:talk .16s infinite alternate}
+@keyframes talk{from{transform:scaleY(.4)}to{transform:scaleY(2.2)}}
+#bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0}
+.btn{font-family:ui-sans-serif,sans-serif;font-weight:600;font-size:.9rem;text-decoration:none;border-radius:999px;padding:10px 20px;border:1px solid var(--accent);cursor:pointer;background:var(--white);color:var(--accent-deep)}
+.btn-primary{background:var(--accent);color:var(--white)}
+#say{flex:1;min-width:180px;font:inherit;font-size:1rem;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--white)}
+.foot{font-size:.85rem;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:16px;margin-top:26px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="../index.html">Oscar Robledo<span>Psicólogo · Céd. 13791687</span></a>
+    <a class="btn" href="../index.html#articulos">Volver a guías</a>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <p class="eyebrow">Juego simbólico · Para padres e hijos</p>
+    <h1>La caja de arena</h1>
+    <p class="lede">Arrastra la casa, el árbol, el kit de doctor y a los monstruitos. El títere habla con tu voz — o con la suya. Sin reglas, sin puntuación: un espacio para representar lo que cuesta decir.</p>
+
+    <div id="stage" aria-label="Escena de juego simbólico"></div>
+
+    <div id="bar">
+      <input id="say" placeholder="Lo que dice el títere…" maxlength="120">
+      <button class="btn btn-primary" id="speak">Hacer hablar</button>
+    </div>
+
+    <p class="foot">Juego libre basado en materiales proyectivos de la psicoterapia Gestalt (caja de arena, títeres, casas de muñecas, kit de doctor): los niños representan situaciones difíciles sin sentirse presionados a hablar de sí mismos. Si en el juego aparecen temas que te preocupan, puedes platicarlo en una llamada gratuita de 15 minutos. <a href="../index.html#contacto">Contacto</a></p>
+  </div>
+</main>
+<script>
+const stage = document.getElementById('stage');
+let z = 10;
+
+// Fondo pintado
+stage.innerHTML = `<svg class="bg" viewBox="0 0 960 540" preserveAspectRatio="none" aria-hidden="true">
+  <circle cx="820" cy="90" r="52" fill="#f6a723" opacity=".85"/>
+  <g fill="#fff" opacity=".8">
+    <ellipse cx="180" cy="80" rx="90" ry="26"/><ellipse cx="260" cy="64" rx="70" ry="22"/>
+    <ellipse cx="600" cy="110" rx="80" ry="20"/>
+  </g>
+  <path d="M0 335 Q240 300 480 330 T960 325 L960 540 L0 540 Z" fill="#a8b28a"/>
+</svg>`;
+
+function addObj(html, w, x, y) {
+  const d = document.createElement('div');
+  d.className = 'obj';
+  d.style.width = w + 'px';
+  d.style.left = x + 'px';
+  d.style.top = y + 'px';
+  d.innerHTML = html;
+  stage.appendChild(d);
+  d.addEventListener('pointerdown', e => {
+    d.setPointerCapture(e.pointerId);
+    d.style.zIndex = ++z;
+    const r0 = d.getBoundingClientRect(), s = stage.getBoundingClientRect();
+    const ox = e.clientX - r0.left, oy = e.clientY - r0.top;
+    const move = ev => {
+      d.style.left = Math.min(s.width - d.offsetWidth, Math.max(0, ev.clientX - s.left - ox)) + 'px';
+      d.style.top = Math.min(s.height - d.offsetHeight, Math.max(0, ev.clientY - s.top - oy)) + 'px';
+    };
+    const up = () => { d.removeEventListener('pointermove', move); d.removeEventListener('pointerup', up); };
+    d.addEventListener('pointermove', move);
+    d.addEventListener('pointerup', up);
+  });
+  return d;
+}
+
+// Casa de muñecas
+addObj(`<svg width="110" height="92" viewBox="0 0 110 92">
+  <rect x="10" y="34" width="90" height="54" fill="#fff6e0" stroke="#231f24" stroke-width="3"/>
+  <polyline points="4,38 55,6 106,38" fill="none" stroke="#231f24" stroke-width="5"/>
+  <rect x="44" y="56" width="22" height="32" fill="#896ab0" stroke="#231f24" stroke-width="3"/>
+  <rect x="18" y="44" width="16" height="16" fill="#7fc4f0" stroke="#231f24" stroke-width="3"/>
+  <rect x="76" y="44" width="16" height="16" fill="#7fc4f0" stroke="#231f24" stroke-width="3"/>
+</svg>`, 110, 60, 300);
+
+// Árbol
+addObj(`<svg width="70" height="100" viewBox="0 0 70 100">
+  <rect x="31" y="58" width="8" height="38" fill="#9b8e6c" stroke="#231f24" stroke-width="3"/>
+  <circle cx="35" cy="34" r="26" fill="#a8b28a" stroke="#231f24" stroke-width="3"/>
+  <circle cx="18" cy="48" r="15" fill="#a8b28a" stroke="#231f24" stroke-width="3"/>
+  <circle cx="52" cy="48" r="15" fill="#a8b28a" stroke="#231f24" stroke-width="3"/>
+</svg>`, 70, 520, 260);
+
+// Kit de doctor
+addObj(`<svg width="86" height="70" viewBox="0 0 86 70">
+  <rect x="4" y="18" width="78" height="46" rx="8" fill="#fff6e0" stroke="#231f24" stroke-width="3"/>
+  <rect x="28" y="6" width="30" height="14" rx="6" fill="none" stroke="#231f24" stroke-width="3"/>
+  <rect x="37" y="34" width="12" height="22" fill="#e2585e"/>
+  <rect x="32" y="39" width="22" height="12" fill="#e2585e"/>
+</svg>`, 86, 700, 320);
+
+// Pelota
+addObj(`<svg width="48" height="48" viewBox="0 0 48 48">
+  <circle cx="24" cy="24" r="20" fill="#f6a723" stroke="#231f24" stroke-width="3"/>
+  <path d="M4 24 Q24 10 44 24" fill="none" stroke="#231f24" stroke-width="3"/>
+</svg>`, 48, 380, 380);
+
+// Títere actor (monstruito huevo con boca animable)
+const actor = addObj(`<img src="../assets/huevo.png" width="84" height="84" alt="Títere monstruito"><div class="mouth"></div>`, 84, 300, 330);
+actor.classList.add('actor');
+
+document.getElementById('speak').addEventListener('click', () => {
+  const txt = document.getElementById('say').value.trim() || "¡Hola!";
+  actor.classList.add('talking');
+  const stop = () => actor.classList.remove('talking');
+  try {
+    const u = new SpeechSynthesisUtterance(txt);
+    u.lang = 'es-MX'; u.rate = 0.95;
+    speechSynthesis.cancel();
+    u.onend = stop;
+    u.onerror = stop;
+    speechSynthesis.speak(u);
+  } catch (_) {}
+  setTimeout(stop, Math.min(6000, txt.length * 110 + 800));
+});
+</script>
+</body>
+</html>
