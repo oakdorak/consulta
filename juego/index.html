@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Juego de islas — Oscar Robledo, Psicólogo</title>
-<meta name="description" content="Cazavínculos y archipiélago explorable: 57 islas de conocimiento neurodivergente conectadas. Juego gratuito para padres.">
+<title>Archipiélago de islas — Oscar Robledo, Psicólogo</title>
+<meta name="description" content="Archipiélago explorable: 57 islas de conocimiento neurodivergente conectadas en un mapa navegable.">
 <meta name="theme-color" content="#231f24">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23896ab0'/><circle cx='16' cy='16' r='7' fill='none' stroke='%23f7f3e8' stroke-width='2'/></svg>">
 <style>
@@ -59,26 +59,14 @@ footer a{color:#584f56;text-decoration:none}
     <p class="eyebrow">Para padres · Juego gratuito</p>
     <h1>El archipiélago de las islas</h1>
     <p class="lede">57 islas de conocimiento sobre neurodivergencia, conectadas por la memoria del viaje. Descubre los vínculos entre ellas.</p>
-    <div class="modes">
-      <button class="mode on" id="m-quiz">Cazavínculos</button>
-      <button class="mode" id="m-map">Explorar islas</button>
-    </div>
-
-    <section id="view-quiz">
-      <div id="quizbox"></div>
-    </section>
-
-    <section id="view-map" hidden>
+    <section id="view-map">
       <svg id="map" viewBox="0 0 720 520" role="img" aria-label="Mapa de islas"></svg>
       <div class="detail" id="detail"><p class="refs">Toca una isla para ver su síntesis y sus vínculos.</p></div>
     </section>
 
-    <div id="cta" hidden>
-      <p class="score" id="final"></p>
-      <div>
-        <a class="btn btn-primary" href="https://wa.me/528119243005?text=Hola%20Oscar%2C%20jugu%C3%A9%20al%20Cazav%C3%ADnculos%20del%20archipi%C3%A9lago%20y%20quiero%20mi%20gu%C3%ADa%20personalizada.">Quiero mi guía por WhatsApp</a>
-        <a class="btn btn-ghost" href="../index.html#articulos">Leer las guías</a>
-      </div>
+    <div>
+      <a class="btn btn-primary" href="https://wa.me/528119243005?text=Hola%20Oscar%2C%20vi%20el%20archipi%C3%A9lago%20de%20islas%20y%20quiero%20mi%20gu%C3%ADa%20personalizada.">Quiero mi guía por WhatsApp</a>
+      <a class="btn btn-ghost" href="../index.html#articulos">Leer las guías</a>
     </div>
   </div>
 </main>
@@ -211,34 +199,9 @@ DATA.edges.forEach(([a, b]) => {
   (links[a] = links[a] || []).push(b);
   (links[b] = links[b] || []).push(a);
 });
-const MQ = document.getElementById('m-quiz'), MM = document.getElementById('m-map');
-const VQ = document.getElementById('view-quiz'), VM = document.getElementById('view-map');
-MQ.onclick = () => { MQ.classList.add('on'); MM.classList.remove('on'); VQ.hidden = false; VM.hidden = true; };
-MM.onclick = () => { MM.classList.add('on'); MQ.classList.remove('on'); VQ.hidden = true; VM.hidden = false; };
 
-// ---- Quiz cazavínculos
-let qi = 0, score = 0;
-const qb = document.getElementById('quizbox');
-function showQ() {
-  if (qi >= QUIZ.quiz.length) {
-    qb.innerHTML = "";
-    document.getElementById('final').textContent = "Puntuación: " + score + "/" + QUIZ.quiz.length + " vínculos cazados.";
-    document.getElementById('cta').hidden = false;
-    return;
-  }
-  const q = QUIZ.quiz[qi];
-  qb.innerHTML = '<div class="q"><p>' + (qi + 1) + ". " + q.q + '</p><div class="opts">' +
-    q.opts.map(o => '<button class="opt">' + o + "</button>").join("") + '</div><div class="fb"></div></div>';
-  qb.querySelectorAll('.opt').forEach(b => b.onclick = () => {
-    const ok = b.textContent === q.ans;
-    qb.querySelectorAll('.opt').forEach(x => x.disabled = true);
-    b.classList.add(ok ? 'ok' : 'bad');
-    if (ok) score++;
-    qb.querySelector('.fb').textContent = q.fb;
-    setTimeout(() => { qi++; showQ(); }, 1600);
-  });
-}
-showQ();
+
+
 
 // ---- Explorer
 const svg = document.getElementById('map');
