@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz para padres — Oscar Robledo, Psicólogo</title>
+<meta name="description" content="Mini-quiz gratuito de señales para padres: ansiedad y sueño, TDAH y culpa, pantallas. Sin registro. Resultado con guía personalizada por WhatsApp.">
+<meta name="theme-color" content="#231f24">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23896ab0'/><circle cx='16' cy='16' r='7' fill='none' stroke='%23f7f3e8' stroke-width='2'/></svg>">
+<style>
+:root{--ink:#231f24;--ink-soft:#554f49;--paper:#f7f3e8;--paper-warm:#e9e4d6;--line:#d8d0bc;--accent:#896ab0;--accent-deep:#52406a;--sand:#9b8e6c;--white:#fff;--radius:14px;--max:720px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+header{border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0}
+.brand{font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;font-weight:600;font-size:1rem;text-decoration:none;color:var(--ink)}
+.brand span{display:block;font-size:.7rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft);margin-top:1px}
+.btn{display:inline-block;font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;font-weight:600;font-size:.9rem;text-decoration:none;border-radius:999px;padding:11px 22px;border:1px solid var(--accent);cursor:pointer}
+.btn-primary{background:var(--accent);color:var(--white)}
+.btn-ghost{background:transparent;color:var(--accent-deep)}
+main{padding:clamp(30px,6vw,52px) 0 70px}
+.eyebrow{font-family:ui-sans-serif,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-deep);margin:0 0 8px}
+h1{font-size:clamp(1.5rem,4vw,2rem);line-height:1.2;letter-spacing:-.015em;margin:0 0 .5em}
+.lede{color:var(--ink-soft);margin:0 0 26px}
+.cards{display:grid;gap:14px}
+.card{display:block;text-align:left;width:100%;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;cursor:pointer;font:inherit;color:inherit}
+.card:hover{border-color:var(--accent)}
+.card h2{margin:0 0 .3em;font-size:1.05rem}
+.card p{margin:0;font-size:.92rem;color:var(--ink-soft)}
+.q{margin:0 0 22px}
+.q p{font-weight:700;margin:0 0 10px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{font-family:ui-sans-serif,sans-serif;font-size:.85rem;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:8px 16px;cursor:pointer;color:var(--ink)}
+.opt.on{background:var(--accent);color:var(--white);border-color:var(--accent)}
+.progress{font-family:ui-sans-serif,sans-serif;font-size:.78rem;color:var(--ink-soft);margin-bottom:18px}
+.result{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin-top:8px}
+.result h2{margin:0 0 6px;font-size:1.25rem}
+.level{display:inline-block;font-family:ui-sans-serif,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:4px 12px;margin-bottom:12px}
+.level.bajo{background:#dfe8d2;color:#3f5a2a}
+.level.medio{background:#f3e3bd;color:#7a5c14}
+.level.alto{background:#f0d4cd;color:#8c3b2e}
+.result p{margin:0 0 12px}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.note{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:16px;margin-top:30px}
+footer{border-top:1px solid var(--line);padding:26px 0 46px;font-family:ui-sans-serif,sans-serif;font-size:.78rem;color:#958d7f}
+footer a{color:#584f56;text-decoration:none}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="../index.html">Oscar Robledo<span>Psicólogo · Céd. 13791687</span></a>
+    <a class="btn btn-ghost" href="../index.html#articulos">Volver a guías</a>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <p class="eyebrow">Para padres · Sin registro</p>
+    <h1>¿Qué señales está mostrando tu hijo?</h1>
+    <p class="lede">Elige un tema y responde 5 preguntas con sinceridad. No es un diagnóstico: es una brújula para saber si conviene hablar con un profesional.</p>
+
+    <div id="pick">
+      <div class="cards">
+        <button class="card" data-nicho="ansiedad"><h2>Ansiedad y sueño</h2><p>El niño que no duerme, que se preocupa por todo, que se despierta llorando.</p></button>
+        <button class="card" data-nicho="tdah"><h2>TDAH, conducta y culpa</h2><p>Atención, impulsividad y el ciclo grito-culpa en casa.</p></button>
+        <button class="card" data-nicho="pantallas"><h2>Pantallas sin guerra</h2><p>Conflictos por celulares y tabletas que nadie gana.</p></button>
+      </div>
+    </div>
+
+    <div id="quiz" hidden>
+      <p class="progress" id="progress"></p>
+      <div id="questions"></div>
+      <div class="cta-row">
+        <button class="btn btn-ghost" id="back">Cambiar tema</button>
+        <button class="btn btn-primary" id="result" disabled>Ver mi resultado</button>
+      </div>
+    </div>
+
+    <div id="done" hidden></div>
+
+    <p class="note">Este quiz es orientativo y no sustituye una valoración profesional. Tus respuestas no salen de tu navegador: nada se guarda ni se envía.</p>
+  </div>
+</main>
+<footer>
+  <div class="wrap">
+    Oscar Robledo · Psicólogo · Cédula profesional 13791687 ·
+    <a href="../index.html#contacto">Contacto</a>
+  </div>
+</footer>
+
+<script>
+const NICHO = {
+  ansiedad: {
+    titulo: "Ansiedad y sueño",
+    articulo: "../articulos/ansiedad-sueno.html",
+    qs: [
+      "¿Cuánto tarda tu hijo en dormirse (más de 30-45 minutos dando vueltas)?",
+      "¿Se despierta en la noche llorando o preocupado?",
+      "¿Evita cosas que antes hacía sin problema (escuela, separarse de ti, amigos)?",
+      "¿Se queja de dolores o molestias sin causa aparente (panza, cabeza)?",
+      "¿Se preocupa excesivamente por cosas pequeñas (que algo salga mal, que se enojen los demás)?"
+    ]
+  },
+  tdah: {
+    titulo: "TDAH, conducta y culpa",
+    articulo: "../articulos/tdah-culpa-paterna.html",
+    qs: [
+      "¿Pierde objetos, no termina tareas o necesita que le repitan lo mismo varias veces?",
+      "¿Interrumpe, actúa sin pensar o tiene dificultad para esperar su turno?",
+      "¿Terminas gritándole más seguido de lo que te gustaría?",
+      "¿Sientes culpa a diario por cómo estás criando?",
+      "¿La escuela reporta problemas de conducta o de atención?"
+    ]
+  },
+  pantallas: {
+    titulo: "Pantallas sin guerra",
+    articulo: "../articulos/pantallas-sin-guerra.html",
+    qs: [
+      "¿La hora de pantallas termina en conflicto o batalla (\"cinco minutos más\")?",
+      "¿Logras sostener las reglas que pones sobre celulares o tabletas?",
+      "¿Hay pantallas cerca de la hora de dormir?",
+      "¿Tu hijo prefiere la pantalla antes que jugar sin pantalla?",
+      "¿Tú también usas el celular en la mesa o en los ratos juntos?"
+    ]
+  }
+};
+const SCALE = [["Nunca", 0], ["Rara vez", 1], ["A veces", 2], ["Siempre", 3]];
+// Preguntas redactadas en positivo (lograr sostener reglas): puntúan al revés.
+const INV = { pantallas: [1] };
+let nicho = null, answers = [];
+const pick = document.getElementById('pick'), quiz = document.getElementById('quiz'),
+      qsBox = document.getElementById('questions'), prog = document.getElementById('progress'),
+      btnR = document.getElementById('result'), done = document.getElementById('done');
+
+pick.addEventListener('click', e => {
+  const b = e.target.closest('[data-nicho]'); if (!b) return;
+  nicho = b.dataset.nicho; answers = Array(NICHO[nicho].qs.length).fill(null);
+  pick.hidden = true; done.hidden = true; quiz.hidden = false;
+  render();
+});
+document.getElementById('back').addEventListener('click', () => {
+  quiz.hidden = true; pick.hidden = false; btnR.disabled = true;
+});
+function render() {
+  prog.textContent = "Tema: " + NICHO[nicho].titulo + " · " + answers.filter(a => a !== null).length + "/" + answers.length + " respondidas";
+  qsBox.innerHTML = NICHO[nicho].qs.map((q, i) =>
+    '<div class="q"><p>' + (i + 1) + ". " + q + '</p><div class="opts">' +
+    SCALE.map(s => '<button class="opt' + (answers[i] === s[1] ? ' on' : '') + '" data-i="' + i + '" data-v="' + s[1] + '">' + s[0] + "</button>").join("") +
+    "</div></div>").join("");
+  btnR.disabled = answers.some(a => a === null);
+}
+qsBox.addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b) return;
+  answers[+b.dataset.i] = +b.dataset.v; render();
+});
+btnR.addEventListener('click', () => {
+  const inv = INV[nicho] || [];
+  const total = answers.reduce((sum, v, i) => sum + (inv.includes(i) ? 3 - v : v), 0);
+  const nivel = total <= 4 ? ["bajo", "Señales leves"] : total <= 9 ? ["medio", "Señales moderadas"] : ["alto", "Señales claras"];
+  const texto = {
+    bajo: "La mayoría de las respuestas están en rango cotidiano. Si algo cambia con el tiempo, vuelve a este quiz o lee la guía: prevenir también es criar.",
+    medio: "Hay señales que merecen atención y pequeños ajustes en casa. La guía de este tema te da los primeros pasos — y si en un par de semanas no cambian, vale la pena platicarlo.",
+    alto: "Las señales son claras y sostenidas. Esto no significa que estés haciendo algo mal, significa que tu hijo necesita apoyo profesional. Hablar con un psicólogo no es rendirse: es el siguiente paso."
+  }[nivel[0]];
+  const wa = "https://wa.me/528119243005?text=" + encodeURIComponent("Hola Oscar, hice tu mini-quiz de " + NICHO[nicho].titulo + " y mi resultado fue: " + nivel[1] + ". Quiero mi guía personalizada.");
+  quiz.hidden = true; done.hidden = false;
+  done.innerHTML =
+    '<div class="result"><span class="level ' + nivel[0] + '">' + nivel[1] + "</span>" +
+    "<h2>" + NICHO[nicho].titulo + "</h2><p>" + texto + "</p>" +
+    '<div class="cta-row"><a class="btn btn-primary" href="' + wa + '">Quiero mi guía personalizada por WhatsApp</a>' +
+    '<a class="btn btn-ghost" href="' + NICHO[nicho].articulo + '">Leer la guía gratuita</a></div></div>';
+});
+</script>
+</body>
+</html>
