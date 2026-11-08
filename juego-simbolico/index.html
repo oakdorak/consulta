@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Juego simbólico — Oscar Robledo, Psicólogo</title>
-<meta name="description" content="Escena de juego simbólico para niños: arrastra la casa, el árbol, el kit de doctor y a los monstruitos. Espacio para representar situaciones difíciles sin hablar directamente.">
+<meta name="description" content="Escena de juego simbólico para niños: dibuja tu propio títere (cuerpo y boca), y anímalo a hablar en la caja de arena. Espacio para representar situaciones difíciles sin hablar directamente de sí mismo.">
 <meta name="theme-color" content="#231f24">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23896ab0'/><circle cx='16' cy='16' r='7' fill='none' stroke='%23f7f3e8' stroke-width='2'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%238896ab0'/><circle cx='16' cy='16' r='7' fill='none' stroke='%23f7f3e8' stroke-width='2'/></svg>">
 <style>
 :root{--ink:#231f24;--ink-soft:#554f49;--paper:#f7f3e8;--line:#d8d0bc;--accent:#896ab0;--accent-deep:#52406a;--sand:#9b8e6c;--white:#fff}
 *{box-sizing:border-box}
@@ -25,16 +25,25 @@ h1{font-size:clamp(1.5rem,4vw,2rem);margin:0 0 .4em}
 #stage svg.bg{position:absolute;inset:0;width:100%;height:100%}
 .obj{position:absolute;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
 .obj:active{cursor:grabbing}
-.obj img{display:block;pointer-events:none}
-.obj svg{display:block;pointer-events:none}
-.actor{width:84px;height:84px}
-.actor .mouth{position:absolute;left:50%;top:62%;width:22px;height:6px;margin-left:-11px;background:#231f24;border-radius:4px;transform-origin:50% 50%}
-.actor.talking .mouth{animation:talk .16s infinite alternate}
-@keyframes talk{from{transform:scaleY(.4)}to{transform:scaleY(2.2)}}
+.obj svg,.obj canvas,.obj img{display:block;pointer-events:none}
+.actor{width:110px;height:140px}
+.actor .pbody{position:absolute;inset:0}
+.actor .pmouth{position:absolute;left:50%;top:60%;width:44%;transform:translateX(-50%)}
+.actor .pmouth canvas{width:100%;height:auto;display:block}
 #bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0}
 .btn{font-family:ui-sans-serif,sans-serif;font-weight:600;font-size:.9rem;text-decoration:none;border-radius:999px;padding:10px 20px;border:1px solid var(--accent);cursor:pointer;background:var(--white);color:var(--accent-deep)}
 .btn-primary{background:var(--accent);color:var(--white)}
 #say{flex:1;min-width:180px;font:inherit;font-size:1rem;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--white)}
+#editor{display:none;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px;margin:18px 0}
+#editor.open{display:block}
+#draw{width:100%;max-width:420px;height:auto;display:block;background:var(--white);border:1px solid var(--line);border-radius:10px;touch-action:none;cursor:crosshair}
+#visemes{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+#visemes figure{margin:0;text-align:center}
+#visemes canvas{width:44px;height:44px;background:#fff;border:1px solid var(--line);border-radius:8px;image-rendering:auto}
+#visemes figcaption{font-family:ui-sans-serif,sans-serif;font-size:.6rem;color:var(--ink-soft);margin-top:2px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
+.sw.on{border-color:var(--ink)}
 .foot{font-size:.85rem;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:16px;margin-top:26px}
 [hidden]{display:none!important}
 </style>
@@ -50,14 +59,32 @@ h1{font-size:clamp(1.5rem,4vw,2rem);margin:0 0 .4em}
   <div class="wrap">
     <p class="eyebrow">Juego simbólico · Para padres e hijos</p>
     <h1>La caja de arena</h1>
-    <p class="lede">Arrastra la casa, el árbol, el kit de doctor y a los monstruitos. El títere habla con tu voz — o con la suya. Sin reglas, sin puntuación: un espacio para representar lo que cuesta decir.</p>
+    <p class="lede">Arrastra la casa, el árbol y el kit de doctor. Dibuja tu propio títere — primero el cuerpo, luego su boca — y anímalo a hablar con tu voz o con la suya. Sin reglas, sin puntuación: un espacio para representar lo que cuesta decir.</p>
 
     <div id="stage" aria-label="Escena de juego simbólico"></div>
 
     <div id="bar">
       <input id="say" placeholder="Lo que dice el títere…" maxlength="120">
       <button class="btn btn-primary" id="speak">Hacer hablar</button>
+      <button class="btn" id="drawbtn">Dibujar títere</button>
     </div>
+
+    <section id="editor">
+      <h2 style="font-size:1.1rem;margin:0 0 10px">Dibujar el títere</h2>
+      <div class="tools">
+        <button class="btn btn-primary" id="mode-body">Cuerpo</button>
+        <button class="btn" id="mode-mouth">Boca</button>
+        <span id="modenote" style="font-size:.85rem;color:var(--ink-soft)">Dibuja el cuerpo de tu títere (cara, pelo, ropa).</span>
+      </div>
+      <canvas id="draw" width="320" height="400"></canvas>
+      <div class="tools" id="palette"></div>
+      <div class="tools">
+        <label style="font-size:.85rem">Grosor <input type="range" id="brush" min="2" max="22" value="8" style="vertical-align:middle"></label>
+        <button class="btn" id="clear">Borrar</button>
+        <button class="btn btn-primary" id="apply">Ponerlo en la escena</button>
+      </div>
+      <div id="visemes" hidden></div>
+    </section>
 
     <p class="foot">Juego libre basado en materiales proyectivos de la psicoterapia Gestalt (caja de arena, títeres, casas de muñecas, kit de doctor): los niños representan situaciones difíciles sin sentirse presionados a hablar de sí mismos. Si en el juego aparecen temas que te preocupan, puedes platicarlo en una llamada gratuita de 15 minutos. <a href="../index.html#contacto">Contacto</a></p>
   </div>
@@ -66,7 +93,6 @@ h1{font-size:clamp(1.5rem,4vw,2rem);margin:0 0 .4em}
 const stage = document.getElementById('stage');
 let z = 10;
 
-// Fondo pintado
 stage.innerHTML = `<svg class="bg" viewBox="0 0 960 540" preserveAspectRatio="none" aria-hidden="true">
   <circle cx="820" cy="90" r="52" fill="#f6a723" opacity=".85"/>
   <g fill="#fff" opacity=".8">
@@ -100,7 +126,6 @@ function addObj(html, w, x, y) {
   return d;
 }
 
-// Casa de muñecas
 addObj(`<svg width="110" height="92" viewBox="0 0 110 92">
   <rect x="10" y="34" width="90" height="54" fill="#fff6e0" stroke="#231f24" stroke-width="3"/>
   <polyline points="4,38 55,6 106,38" fill="none" stroke="#231f24" stroke-width="5"/>
@@ -109,7 +134,6 @@ addObj(`<svg width="110" height="92" viewBox="0 0 110 92">
   <rect x="76" y="44" width="16" height="16" fill="#7fc4f0" stroke="#231f24" stroke-width="3"/>
 </svg>`, 110, 60, 300);
 
-// Árbol
 addObj(`<svg width="70" height="100" viewBox="0 0 70 100">
   <rect x="31" y="58" width="8" height="38" fill="#9b8e6c" stroke="#231f24" stroke-width="3"/>
   <circle cx="35" cy="34" r="26" fill="#a8b28a" stroke="#231f24" stroke-width="3"/>
@@ -117,7 +141,6 @@ addObj(`<svg width="70" height="100" viewBox="0 0 70 100">
   <circle cx="52" cy="48" r="15" fill="#a8b28a" stroke="#231f24" stroke-width="3"/>
 </svg>`, 70, 520, 260);
 
-// Kit de doctor
 addObj(`<svg width="86" height="70" viewBox="0 0 86 70">
   <rect x="4" y="18" width="78" height="46" rx="8" fill="#fff6e0" stroke="#231f24" stroke-width="3"/>
   <rect x="28" y="6" width="30" height="14" rx="6" fill="none" stroke="#231f24" stroke-width="3"/>
@@ -125,29 +148,177 @@ addObj(`<svg width="86" height="70" viewBox="0 0 86 70">
   <rect x="32" y="39" width="22" height="12" fill="#e2585e"/>
 </svg>`, 86, 700, 320);
 
-// Pelota
 addObj(`<svg width="48" height="48" viewBox="0 0 48 48">
   <circle cx="24" cy="24" r="20" fill="#f6a723" stroke="#231f24" stroke-width="3"/>
   <path d="M4 24 Q24 10 44 24" fill="none" stroke="#231f24" stroke-width="3"/>
 </svg>`, 48, 380, 380);
 
-// Títere actor (monstruito huevo con boca animable)
-const actor = addObj(`<img src="../assets/huevo.png" width="84" height="84" alt="Títere monstruito"><div class="mouth"></div>`, 84, 300, 330);
+// ---- Títere dibujable: actor con cuerpo (canvas) + boca por fonemas
+const actor = addObj('<div class="pbody"></div><div class="pmouth"><canvas width="160" height="100"></canvas></div>', 110, 300, 300);
 actor.classList.add('actor');
+const bodyCv = document.createElement('canvas');
+const mouthCv = document.createElement('canvas');
+bodyCv.width = 160; bodyCv.height = 200;
+mouthCv.width = 160; mouthCv.height = 100;
+let bodyImg = null, mouthImg = null;
+const visemes = {}; // clave -> canvas 160x100
 
+// Editor
+const dc = document.getElementById('draw');
+const dctx = dc.getContext('2d');
+dctx.fillStyle = '#ffffff'; dctx.fillRect(0, 0, dc.width, dc.height);
+dctx.lineCap = 'round'; dctx.lineJoin = 'round';
+let mode = 'body', color = '#231f24', drawing = false, last = null;
+
+const PALETTE = ['#231f24', '#896ab0', '#f6a723', '#3a86d8', '#e2585e', '#a8b28a', '#fff6e0', '#9b8e6c'];
+const palBox = document.getElementById('palette');
+PALETTE.forEach(c => {
+  const b = document.createElement('button');
+  b.className = 'sw' + (c === color ? ' on' : '');
+  b.style.background = c;
+  b.setAttribute('aria-label', c);
+  b.onclick = () => { color = c; palBox.querySelectorAll('.sw').forEach(x => x.classList.remove('on')); b.classList.add('on'); };
+  palBox.appendChild(b);
+});
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('mode-body').classList.toggle('btn-primary', m === 'body');
+  document.getElementById('mode-mouth').classList.toggle('btn-primary', m === 'mouth');
+  document.getElementById('modenote').textContent = m === 'body'
+    ? 'Dibuja el cuerpo de tu títere (cara, pelo, ropa).'
+    : 'Dibuja la boca de tu títere — de ahí salen todas sus voces.';
+  const target = m === 'body' ? bodyCv : mouthCv;
+  dctx.clearRect(0, 0, dc.width, dc.height);
+  dctx.fillStyle = '#ffffff'; dctx.fillRect(0, 0, dc.width, dc.height);
+  dctx.drawImage(target, 0, 0, dc.width, dc.height);
+}
+document.getElementById('mode-body').onclick = () => setMode('body');
+document.getElementById('mode-mouth').onclick = () => setMode('mouth');
+
+function pos(e) {
+  const r = dc.getBoundingClientRect();
+  return [(e.clientX - r.left) * dc.width / r.width, (e.clientY - r.top) * dc.height / r.height];
+}
+dc.addEventListener('pointerdown', e => { drawing = true; last = pos(e); dc.setPointerCapture(e.pointerId); });
+dc.addEventListener('pointermove', e => {
+  if (!drawing) return;
+  const p = pos(e);
+  dctx.strokeStyle = color; dctx.lineWidth = +document.getElementById('brush').value;
+  dctx.beginPath(); dctx.moveTo(last[0], last[1]); dctx.lineTo(p[0], p[1]); dctx.stroke();
+  last = p;
+});
+dc.addEventListener('pointerup', () => {
+  drawing = false;
+  (mode === 'body' ? bodyCv : mouthCv).getContext('2d').drawImage(dc, 0, 0);
+  if (mode === 'mouth') buildVisemes();
+});
+document.getElementById('clear').onclick = () => {
+  dctx.clearRect(0, 0, dc.width, dc.height);
+  dctx.fillStyle = '#ffffff'; dctx.fillRect(0, 0, dc.width, dc.height);
+  (mode === 'body' ? bodyCv : mouthCv).getContext('2d').clearRect(0, 0, dc.width, dc.height);
+};
+
+// Genera 9 visemas desde la boca dibujada (transforms del propio trazo)
+function xform(cv, sx, sy) {
+  const out = document.createElement('canvas');
+  out.width = 160; out.height = 100;
+  const o = out.getContext('2d');
+  o.clearRect(0, 0, 160, 100);
+  o.drawImage(cv, 0, 0, 160 * sx, 100 * sy);
+  return out;
+}
+function buildVisemes() {
+  visemes.AEI = xform(mouthCv, 1, 1);
+  visemes.O = xform(mouthCv, 0.72, 1.35);
+  visemes.BMP = xform(mouthCv, 1, 0.12);
+  visemes.CDGKN = xform(mouthCv, 0.9, 0.55);
+  visemes.R = xform(mouthCv, 0.95, 0.7);
+  const fv = xform(mouthCv, 1, 1);
+  const fx = fv.getContext('2d');
+  fx.fillStyle = '#ffffff'; fx.fillRect(30, 32, 100, 16);
+  visemes.FV = fv;
+  const th = xform(mouthCv, 1, 1);
+  const tx = th.getContext('2d');
+  tx.fillStyle = '#e2585e'; tx.fillRect(56, 62, 48, 18);
+  visemes.TH = th;
+  const l = xform(mouthCv, 1, 1);
+  const lx = l.getContext('2d');
+  lx.fillStyle = '#ffffff'; lx.fillRect(30, 32, 100, 14);
+  lx.fillStyle = '#e2585e'; lx.fillRect(56, 66, 48, 16);
+  visemes.L = l;
+  const qw = xform(mouthCv, 0.6, 1.4);
+  visemes.QW = qw;
+  visemes.OPEN = xform(mouthCv, 1, 1.25);
+  const box = document.getElementById('visemes');
+  box.hidden = false;
+  box.innerHTML = "";
+  ["AEI", "O", "BMP", "FV", "TH", "CDGKN", "QW", "L", "R"].forEach(k => {
+    const fig = document.createElement('figure');
+    fig.appendChild(visemes[k]);
+    const cap = document.createElement('figcaption');
+    cap.textContent = k;
+    fig.appendChild(cap);
+    box.appendChild(fig);
+  });
+}
+document.getElementById('apply').onclick = () => {
+  bodyImg = bodyCv.toDataURL('image/png');
+  mouthImg = mouthCv.toDataURL('image/png');
+  const pbody = actor.querySelector('.pbody');
+  pbody.innerHTML = '';
+  const img = new Image(); img.src = bodyImg; img.width = 110; img.height = 140;
+  pbody.appendChild(img);
+  if (!Object.keys(visemes).length) buildVisemes();
+  document.getElementById('editor').classList.remove('open');
+};
+document.getElementById('drawbtn').onclick = () => {
+  document.getElementById('editor').classList.add('open');
+  document.getElementById('editor').scrollIntoView({ behavior: 'smooth' });
+};
+
+// Hablar: fonema -> visema (español: vocales, bmp cerrada, fv dientes, l, r, resto media)
+function visemeFor(ch) {
+  const c = ch.toLowerCase();
+  if ("oú".includes(c)) return "O";
+  if ("aeiáéí".includes(c)) return "AEI";
+  if ("bmp".includes(c)) return "BMP";
+  if ("fv".includes(c)) return "FV";
+  if (c === "l") return "L";
+  if (c === "r" || c === "ñ") return "R";
+  if (c === "t" || c === "th") return "TH";
+  if ("qw".includes(c)) return "QW";
+  if (c === " ") return "BMP";
+  return "CDGKN";
+}
 document.getElementById('speak').addEventListener('click', () => {
   const txt = document.getElementById('say').value.trim() || "¡Hola!";
-  actor.classList.add('talking');
-  const stop = () => actor.classList.remove('talking');
+  if (!bodyImg) {
+    document.getElementById('editor').classList.add('open');
+    document.getElementById('editor').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+  const mc = actor.querySelector('.pmouth canvas');
+  const mctx = mc.getContext('2d');
+  const seq = [...txt].map(visemeFor);
+  let i = 0;
+  const step = 110;
+  const iv = setInterval(() => {
+    if (i >= seq.length) { clearInterval(iv); return; }
+    const v = visemes[seq[i]] || visemes.AEI;
+    mctx.clearRect(0, 0, 160, 100);
+    mctx.drawImage(v, 0, 0);
+    i++;
+  }, step);
   try {
     const u = new SpeechSynthesisUtterance(txt);
     u.lang = 'es-MX'; u.rate = 0.95;
     speechSynthesis.cancel();
-    u.onend = stop;
-    u.onerror = stop;
+    u.onend = () => clearInterval(iv);
+    u.onerror = () => clearInterval(iv);
     speechSynthesis.speak(u);
   } catch (_) {}
-  setTimeout(stop, Math.min(6000, txt.length * 110 + 800));
+  setTimeout(() => clearInterval(iv), Math.min(8000, txt.length * 110 + 900));
 });
 </script>
 </body>
