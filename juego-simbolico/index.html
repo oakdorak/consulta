@@ -153,20 +153,21 @@ addObj(`<svg width="48" height="48" viewBox="0 0 48 48">
   <path d="M4 24 Q24 10 44 24" fill="none" stroke="#231f24" stroke-width="3"/>
 </svg>`, 48, 380, 380);
 
-// ---- Títere dibujable: actor con cuerpo (canvas) + boca por fonemas
+// ---- Títere dibujable: 2 capas persistentes transparentes (cuerpo + boca)
+// Ambos lienzos comparten coords 320x400: la boca se dibuja SOBRE el cuerpo
+// (ancla donde el niño la puso) y al importar se recortan por su bbox.
 const actor = addObj('<div class="pbody"></div><div class="pmouth"><canvas width="160" height="100"></canvas></div>', 110, 300, 300);
 actor.classList.add('actor');
 const bodyCv = document.createElement('canvas');
 const mouthCv = document.createElement('canvas');
-bodyCv.width = 160; bodyCv.height = 200;
-mouthCv.width = 160; mouthCv.height = 100;
-let bodyImg = null, mouthImg = null;
-const visemes = {}; // clave -> canvas 160x100
+bodyCv.width = 320; bodyCv.height = 400;
+mouthCv.width = 320; mouthCv.height = 400;
+const visemes = {}; // clave -> canvas recortado de la boca
 
-// Editor
+// Editor: UN lienzo visible que refleja la CAPA activa (cuerpo o boca).
+// Los trazos se guardan al instante en su capa transparente propia.
 const dc = document.getElementById('draw');
 const dctx = dc.getContext('2d');
-dctx.fillStyle = '#ffffff'; dctx.fillRect(0, 0, dc.width, dc.height);
 dctx.lineCap = 'round'; dctx.lineJoin = 'round';
 let mode = 'body', color = '#231f24', drawing = false, last = null;
 
@@ -181,19 +182,19 @@ PALETTE.forEach(c => {
   palBox.appendChild(b);
 });
 
+function layerCtx() { return (mode === 'body' ? bodyCv : mouthCv).getContext('2d'); }
 function setMode(m) {
   mode = m;
   document.getElementById('mode-body').classList.toggle('btn-primary', m === 'body');
   document.getElementById('mode-mouth').classList.toggle('btn-primary', m === 'mouth');
   document.getElementById('modenote').textContent = m === 'body'
     ? 'Dibuja el cuerpo de tu títere (cara, pelo, ropa).'
-    : 'Dibuja la boca de tu títere — de ahí salen todas sus voces.';
-  const target = m === 'body' ? bodyCv : mouthCv;
+    : 'Dibuja la boca SOBRE su cara — ahí es donde hablará.';
+  // El lienzo refleja la capa activa; en modo boca se ve el cuerpo debajo (referencia y ancla)
   dctx.clearRect(0, 0, dc.width, dc.height);
-  dctx.fillStyle = '#ffffff'; dctx.fillRect(0, 0, dc.width, dc.height);
-  dctx.drawImage(target, 0, 0, dc.width, dc.height);
-}
-document.getElementById('mode-body').onclick = () => setMode('body');
+  dctx.drawImage(bodyCv, 0, 0);
+  if (m === 'mouth') dctx.drawImage(mouthCv, 0, 0);
+}document.getElementById('mode-body').onclick = () => setMode('body');
 document.getElementById('mode-mouth').onclick = () => setMode('mouth');
 
 function pos(e) {
@@ -204,52 +205,78 @@ dc.addEventListener('pointerdown', e => { drawing = true; last = pos(e); dc.setP
 dc.addEventListener('pointermove', e => {
   if (!drawing) return;
   const p = pos(e);
-  dctx.strokeStyle = color; dctx.lineWidth = +document.getElementById('brush').value;
-  dctx.beginPath(); dctx.moveTo(last[0], last[1]); dctx.lineTo(p[0], p[1]); dctx.stroke();
+  const cx = layerCtx();
+  cx.strokeStyle = color; cx.lineWidth = +document.getElementById('brush').value;
+  cx.beginPath(); cx.moveTo(last[0], last[1]); cx.lineTo(p[0], p[1]); cx.stroke();
   last = p;
+  setMode(mode);
 });
 dc.addEventListener('pointerup', () => {
   drawing = false;
-  (mode === 'body' ? bodyCv : mouthCv).getContext('2d').drawImage(dc, 0, 0);
   if (mode === 'mouth') buildVisemes();
 });
 document.getElementById('clear').onclick = () => {
-  dctx.clearRect(0, 0, dc.width, dc.height);
-  dctx.fillStyle = '#ffffff'; dctx.fillRect(0, 0, dc.width, dc.height);
-  (mode === 'body' ? bodyCv : mouthCv).getContext('2d').clearRect(0, 0, dc.width, dc.height);
+  layerCtx().clearRect(0, 0, 320, 400);
+  setMode(mode);
 };
+
+// Recorta un canvas a su bbox de trazo (sin fondo, transparente)
+function trim(cv) {
+  const cx = cv.getContext('2d');
+  const data = cx.getImageData(0, 0, cv.width, cv.height).data;
+  let x0 = cv.width, y0 = cv.height, x1 = 0, y1 = 0, found = false;
+  for (let y = 0; y < cv.height; y++) for (let x = 0; x < cv.width; x++) {
+    if (data[(y * cv.width + x) * 4 + 3] > 8) {
+      found = true;
+      if (x < x0) x0 = x; if (x > x1) x1 = x;
+      if (y < y0) y0 = y; if (y > y1) y1 = y;
+    }
+  }
+  if (!found) return null;
+  const out = document.createElement('canvas');
+  out.width = x1 - x0 + 1; out.height = y1 - y0 + 1;
+  out.getContext('2d').drawImage(cv, x0, y0, out.width, out.height, 0, 0, out.width, out.height);
+  return { cv: out, x: x0, y: y0 };
+}
 
 // Genera 9 visemas desde la boca dibujada (transforms del propio trazo)
 function xform(cv, sx, sy) {
   const out = document.createElement('canvas');
-  out.width = 160; out.height = 100;
+  out.width = cv.width; out.height = cv.height;
   const o = out.getContext('2d');
-  o.clearRect(0, 0, 160, 100);
-  o.drawImage(cv, 0, 0, 160 * sx, 100 * sy);
+  o.clearRect(0, 0, out.width, out.height);
+  o.drawImage(cv, 0, 0, out.width * sx, out.height * sy);
   return out;
 }
+let mouthTrim = null;
 function buildVisemes() {
-  visemes.AEI = xform(mouthCv, 1, 1);
-  visemes.O = xform(mouthCv, 0.72, 1.35);
-  visemes.BMP = xform(mouthCv, 1, 0.12);
-  visemes.CDGKN = xform(mouthCv, 0.9, 0.55);
-  visemes.R = xform(mouthCv, 0.95, 0.7);
-  const fv = xform(mouthCv, 1, 1);
-  const fx = fv.getContext('2d');
-  fx.fillStyle = '#ffffff'; fx.fillRect(30, 32, 100, 16);
+  mouthTrim = trim(mouthCv);
+  if (!mouthTrim) { document.getElementById('visemes').hidden = true; return; }
+  const src = mouthTrim.cv, W = src.width, H = src.height;
+  const mk = (sx, sy) => {
+    const out = document.createElement('canvas');
+    out.width = W; out.height = H;
+    out.getContext('2d').drawImage(src, 0, 0, W * sx, H * sy,
+      W * (1 - sx) / 2, H * (1 - sy) / 2, W * sx, H * sy);
+    return out;
+  };
+  visemes.AEI = mk(1, 1);
+  visemes.O = mk(0.72, 1.35);
+  visemes.BMP = mk(1, 0.12);
+  visemes.CDGKN = mk(0.9, 0.55);
+  visemes.R = mk(0.95, 0.72);
+  const fv = mk(1, 1); const fx = fv.getContext('2d');
+  fx.fillStyle = '#ffffff';
+  fx.fillRect(W * 0.22, H * 0.28, W * 0.56, H * 0.16);
   visemes.FV = fv;
-  const th = xform(mouthCv, 1, 1);
-  const tx = th.getContext('2d');
-  tx.fillStyle = '#e2585e'; tx.fillRect(56, 62, 48, 18);
+  const th = mk(1, 1); const tx = th.getContext('2d');
+  tx.fillStyle = '#e2585e'; tx.fillRect(W * 0.38, H * 0.62, W * 0.24, H * 0.18);
   visemes.TH = th;
-  const l = xform(mouthCv, 1, 1);
-  const lx = l.getContext('2d');
-  lx.fillStyle = '#ffffff'; lx.fillRect(30, 32, 100, 14);
-  lx.fillStyle = '#e2585e'; lx.fillRect(56, 66, 48, 16);
+  const l = mk(1, 1); const lx = l.getContext('2d');
+  lx.fillStyle = '#ffffff'; lx.fillRect(W * 0.22, H * 0.28, W * 0.56, H * 0.14);
+  lx.fillStyle = '#e2585e'; lx.fillRect(W * 0.38, H * 0.64, W * 0.24, H * 0.16);
   visemes.L = l;
-  const qw = xform(mouthCv, 0.6, 1.4);
-  visemes.QW = qw;
-  visemes.OPEN = xform(mouthCv, 1, 1.25);
+  visemes.QW = mk(0.6, 1.4);
   const box = document.getElementById('visemes');
   box.hidden = false;
   box.innerHTML = "";
@@ -262,14 +289,31 @@ function buildVisemes() {
     box.appendChild(fig);
   });
 }
+let applied = false;
 document.getElementById('apply').onclick = () => {
-  bodyImg = bodyCv.toDataURL('image/png');
-  mouthImg = mouthCv.toDataURL('image/png');
+  const bt = trim(bodyCv), mt = trim(mouthCv);
+  if (!bt) { alert('Dibuja el cuerpo primero'); return; }
+  if (!mt) buildVisemes();
+  applied = true;
   const pbody = actor.querySelector('.pbody');
   pbody.innerHTML = '';
-  const img = new Image(); img.src = bodyImg; img.width = 110; img.height = 140;
+  const img = new Image(); img.src = bt.cv.toDataURL('image/png');
+  // tamaño proporcional al bbox (máx 190px de alto), sin estirar
+  const h = Math.min(190, Math.max(120, bt.cv.height * 190 / Math.max(bt.cv.width, bt.cv.height) / (bt.cv.height / 190) * 190 / 190));
+  const Hh = Math.min(190, bt.cv.height);
+  const Ww = Math.round(bt.cv.width * Hh / bt.cv.height);
+  actor.style.width = Ww + 'px';
+  actor.style.height = Hh + 'px';
+  img.style.width = '100%'; img.style.height = '100%';
   pbody.appendChild(img);
-  if (!Object.keys(visemes).length) buildVisemes();
+  // boca incrustada donde el niño la dibujó (ancla relativa al cuerpo)
+  const pm = actor.querySelector('.pmouth');
+  const mc = pm.querySelector('canvas');
+  mc.width = mt.cv.width; mc.height = mt.cv.height;
+  pm.style.left = Math.round((mt.x - bt.x) * Ww / bt.cv.width) + 'px';
+  pm.style.top = Math.round((mt.y - bt.y) * Hh / bt.cv.height) + 'px';
+  pm.style.width = Math.round(mt.cv.width * Ww / bt.cv.width) + 'px';
+  pm.style.height = Math.round(mt.cv.height * Hh / bt.cv.height) + 'px';
   document.getElementById('editor').classList.remove('open');
 };
 document.getElementById('drawbtn').onclick = () => {
@@ -293,7 +337,7 @@ function visemeFor(ch) {
 }
 document.getElementById('speak').addEventListener('click', () => {
   const txt = document.getElementById('say').value.trim() || "¡Hola!";
-  if (!bodyImg) {
+  if (!applied) {
     document.getElementById('editor').classList.add('open');
     document.getElementById('editor').scrollIntoView({ behavior: 'smooth' });
     return;
