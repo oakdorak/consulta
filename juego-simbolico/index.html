@@ -153,11 +153,35 @@ addObj(`<svg width="48" height="48" viewBox="0 0 48 48">
   <path d="M4 24 Q24 10 44 24" fill="none" stroke="#231f24" stroke-width="3"/>
 </svg>`, 48, 380, 380);
 
-// ---- Títere dibujable: 2 capas persistentes transparentes (cuerpo + boca)
-// Ambos lienzos comparten coords 320x400: la boca se dibuja SOBRE el cuerpo
-// (ancla donde el niño la puso) y al importar se recortan por su bbox.
+// ---- Títere dibujable: SÍMBOLO (MovieClip) con capa cuerpo + capa boca
+// El símbolo Boca es un clip de 9 frames (visemas); el símbolo Títere lo
+// instancia en escena. Mientras habla, el clip salta de frame por fonema (loop).
 const actor = addObj('<div class="pbody"></div><div class="pmouth"><canvas width="160" height="100"></canvas></div>', 110, 300, 300);
 actor.classList.add('actor');
+const actorClip = {   // estado del clip en escena
+  playing: false, iv: null,
+  play(seq, fps) {
+    this.stop();
+    this.playing = true;
+    let i = 0;
+    this.iv = setInterval(() => {
+      if (i >= seq.length) { this.stop(); return; }
+      setFrame(seq[i++]);
+    }, 1000 / fps);
+  },
+  stop() {
+    this.playing = false;
+    if (this.iv) { clearInterval(this.iv); this.iv = null; }
+  }
+};
+function setFrame(key) {
+  const mc = actor.querySelector('.pmouth canvas');
+  const v = visemes[key] || visemes.AEI;
+  if (!v) return;
+  const mctx = mc.getContext('2d');
+  mctx.clearRect(0, 0, mc.width, mc.height);
+  mctx.drawImage(v, 0, 0, mc.width, mc.height);
+}
 const bodyCv = document.createElement('canvas');
 const mouthCv = document.createElement('canvas');
 bodyCv.width = 320; bodyCv.height = 400;
@@ -314,6 +338,8 @@ document.getElementById('apply').onclick = () => {
   pm.style.top = Math.round((mt.y - bt.y) * Hh / bt.cv.height) + 'px';
   pm.style.width = Math.round(mt.cv.width * Ww / bt.cv.width) + 'px';
   pm.style.height = Math.round(mt.cv.height * Hh / bt.cv.height) + 'px';
+  // El símbolo entra completo: cuerpo + clip de boca con su frame de reposo
+  setFrame('AEI');
   document.getElementById('editor').classList.remove('open');
 };
 document.getElementById('drawbtn').onclick = () => {
@@ -342,27 +368,18 @@ document.getElementById('speak').addEventListener('click', () => {
     document.getElementById('editor').scrollIntoView({ behavior: 'smooth' });
     return;
   }
-  const mc = actor.querySelector('.pmouth canvas');
-  const mctx = mc.getContext('2d');
   const seq = [...txt].map(visemeFor);
-  let i = 0;
-  const step = 110;
-  const iv = setInterval(() => {
-    if (i >= seq.length) { clearInterval(iv); return; }
-    const v = visemes[seq[i]] || visemes.AEI;
-    mctx.clearRect(0, 0, 160, 100);
-    mctx.drawImage(v, 0, 0);
-    i++;
-  }, step);
+  // Timeline del clip: el símbolo salta de frame por fonema (~10 fps, loop)
+  actorClip.play(seq, 9);
   try {
     const u = new SpeechSynthesisUtterance(txt);
     u.lang = 'es-MX'; u.rate = 0.95;
     speechSynthesis.cancel();
-    u.onend = () => clearInterval(iv);
-    u.onerror = () => clearInterval(iv);
+    u.onend = () => { actorClip.stop(); setFrame('AEI'); };
+    u.onerror = () => { actorClip.stop(); setFrame('AEI'); };
     speechSynthesis.speak(u);
   } catch (_) {}
-  setTimeout(() => clearInterval(iv), Math.min(8000, txt.length * 110 + 900));
+  setTimeout(() => { actorClip.stop(); }, Math.min(8000, txt.length * 110 + 900));
 });
 </script>
 </body>
